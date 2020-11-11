@@ -12,7 +12,7 @@ class ButtonFactory {
     static func makeButton(frame: CGRect, name: String) -> UIButton {
         let button = UIButton()
         button.frame = frame
-        button.backgroundColor = UIColor.red
+        button.backgroundColor = UIColor.yellow
         button.setTitle(name, for: .normal)
         return button
     }

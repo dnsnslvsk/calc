@@ -17,6 +17,7 @@
 		2F61CAA2255743ED007AE3C6 /* LableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61CAA1255743ED007AE3C6 /* LableFactory.swift */; };
 		2F97A76A2558845900EFA1F2 /* pickerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F97A7692558845900EFA1F2 /* pickerFactory.swift */; };
 		2FC7855D255C639D0058497B /* ButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7855C255C639D0058497B /* ButtonFactory.swift */; };
+		2FC7855F255C6DA60058497B /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2FC7855E255C6DA60058497B /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		2F61CAA1255743ED007AE3C6 /* LableFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LableFactory.swift; sourceTree = "<group>"; };
 		2F97A7692558845900EFA1F2 /* pickerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pickerFactory.swift; sourceTree = "<group>"; };
 		2FC7855C255C639D0058497B /* ButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonFactory.swift; sourceTree = "<group>"; };
+		2FC7855E255C6DA60058497B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 		2F24001B2557209500609F4D = {
 			isa = PBXGroup;
 			children = (
+				2FC7855E255C6DA60058497B /* .gitignore */,
 				2F2400262557209500609F4D /* calc */,
 				2F2400252557209500609F4D /* Products */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FC7855F255C6DA60058497B /* .gitignore in Resources */,
 				2F2400342557209600609F4D /* LaunchScreen.storyboard in Resources */,
 				2F2400312557209600609F4D /* Assets.xcassets in Resources */,
 				2F24002F2557209500609F4D /* Main.storyboard in Resources */,
