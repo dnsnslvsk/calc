@@ -9,6 +9,9 @@
 import UIKit
 
 class PickerFactory {
+    
+    // MARK: - Configure
+    
     static func makePicker(frame: CGRect) -> UIPickerView {
         let picker = UIPickerView()
         picker.frame = frame

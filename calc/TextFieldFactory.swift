@@ -9,6 +9,9 @@
 import UIKit
 
 class TexfFieldFactory {
+    
+    // MARK: - Configure
+    
     static func makeTextField(frame: CGRect, name: String) -> UITextField {
         let textField =  UITextField(frame: frame)
         textField.placeholder = name

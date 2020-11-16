@@ -9,6 +9,9 @@
 import UIKit
 
 class ButtonFactory {
+    
+    // MARK: - Configure
+    
     static func makeButton(frame: CGRect, name: String) -> UIButton {
         let button = UIButton()
         button.frame = frame
