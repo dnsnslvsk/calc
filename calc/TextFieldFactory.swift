@@ -10,18 +10,8 @@ import UIKit
 
 class TexfFieldFactory {
     
-    // MARK: - Configure
-    
-    static func makeTextField(frame: CGRect, name: String) -> UITextField {
-        let textField =  UITextField(frame: frame)
-        textField.placeholder = name
-        textField.font = UIFont.systemFont(ofSize: 15)
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        textField.returnKeyType = UIReturnKeyType.continue
-        textField.clearButtonMode = UITextField.ViewMode.always
-        textField.textAlignment = .center
+    static func makeTextField() -> UITextField {
+        let textField =  UITextField()
         return textField
     }
 }

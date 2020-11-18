@@ -10,13 +10,8 @@ import UIKit
 
 class LableFactory {
     
-    // MARK: - Configure
-    
-    static func makeLable(frame: CGRect, name: String) -> UILabel {
-        let label = UILabel(frame: frame)
-        label.textAlignment = .center
-        label.text = name
-        label.backgroundColor = .systemGray
+    static func makeLabel() -> UILabel {
+        let label = UILabel()
         return label
     }
 }

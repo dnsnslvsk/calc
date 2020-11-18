@@ -13,7 +13,7 @@
 		2FC7855F255C6DA60058497B /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2FC7855E255C6DA60058497B /* .gitignore */; };
 		36D2F044255C8CA200B49765 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03D255C8CA100B49765 /* SceneDelegate.swift */; };
 		36D2F045255C8CA200B49765 /* ButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03E255C8CA100B49765 /* ButtonFactory.swift */; };
-		36D2F046255C8CA200B49765 /* pickerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03F255C8CA100B49765 /* pickerFactory.swift */; };
+		36D2F046255C8CA200B49765 /* PickerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03F255C8CA100B49765 /* PickerFactory.swift */; };
 		36D2F047255C8CA200B49765 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F040255C8CA100B49765 /* AppDelegate.swift */; };
 		36D2F048255C8CA200B49765 /* TextFieldFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F041255C8CA100B49765 /* TextFieldFactory.swift */; };
 		36D2F049255C8CA200B49765 /* LableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F042255C8CA200B49765 /* LableFactory.swift */; };
@@ -29,7 +29,7 @@
 		2FC7855E255C6DA60058497B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		36D2F03D255C8CA100B49765 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		36D2F03E255C8CA100B49765 /* ButtonFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonFactory.swift; sourceTree = "<group>"; };
-		36D2F03F255C8CA100B49765 /* pickerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = pickerFactory.swift; sourceTree = "<group>"; };
+		36D2F03F255C8CA100B49765 /* PickerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerFactory.swift; sourceTree = "<group>"; };
 		36D2F040255C8CA100B49765 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36D2F041255C8CA100B49765 /* TextFieldFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldFactory.swift; sourceTree = "<group>"; };
 		36D2F042255C8CA200B49765 /* LableFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LableFactory.swift; sourceTree = "<group>"; };
@@ -70,10 +70,10 @@
 				36D2F040255C8CA100B49765 /* AppDelegate.swift */,
 				36D2F03D255C8CA100B49765 /* SceneDelegate.swift */,
 				36D2F043255C8CA200B49765 /* ViewController.swift */,
-				36D2F03E255C8CA100B49765 /* ButtonFactory.swift */,
 				36D2F042255C8CA200B49765 /* LableFactory.swift */,
-				36D2F03F255C8CA100B49765 /* pickerFactory.swift */,
+				36D2F03E255C8CA100B49765 /* ButtonFactory.swift */,
 				36D2F041255C8CA100B49765 /* TextFieldFactory.swift */,
+				36D2F03F255C8CA100B49765 /* PickerFactory.swift */,
 				2F24002D2557209500609F4D /* Main.storyboard */,
 				2F2400302557209600609F4D /* Assets.xcassets */,
 				2F2400322557209600609F4D /* LaunchScreen.storyboard */,
@@ -160,7 +160,7 @@
 				36D2F048255C8CA200B49765 /* TextFieldFactory.swift in Sources */,
 				36D2F045255C8CA200B49765 /* ButtonFactory.swift in Sources */,
 				36D2F04A255C8CA200B49765 /* ViewController.swift in Sources */,
-				36D2F046255C8CA200B49765 /* pickerFactory.swift in Sources */,
+				36D2F046255C8CA200B49765 /* PickerFactory.swift in Sources */,
 				36D2F044255C8CA200B49765 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
