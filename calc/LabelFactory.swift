@@ -8,10 +8,12 @@
 
 import UIKit
 
-class LableFactory {
+class LabelFactory {
     
     static func makeLabel() -> UILabel {
         let label = UILabel()
+        label.textAlignment = .center
+        label.backgroundColor = .secondaryLabel
         return label
     }
 }
