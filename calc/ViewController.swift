@@ -74,14 +74,14 @@ class ViewController: UIViewController {
         button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
         let name = massArray[0]
         button.setTitle(name, for: .normal)
-        dimensionButton.addTarget(self, action: #selector(dimensionButtonAction (_ :)), for: .touchUpInside)
+        dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
         view.addSubview(button)
     }
     
     private func configureDimensionTextField(_ textField: UITextField) {
         textField.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
         dimensionTextField.text = lengthArray[0]
-        dimensionTextField.addTarget(self, action: #selector(dimensionTextFieldAction (_ :)), for: .allTouchEvents)
+        dimensionTextField.addTarget(self, action: #selector(dimensionTextFieldAction(_ :)), for: .allTouchEvents)
         view.addSubview(textField)
     }
     
@@ -102,7 +102,7 @@ class ViewController: UIViewController {
         button.frame = CGRect(x: 150, y: 400, width: 100, height: 40)
         let name = "Calculate"
         button.setTitle(name, for: .normal)
-        calculateButton.addTarget(self, action: #selector(calculateButtonAction (_ :)), for: .touchUpInside)
+        calculateButton.addTarget(self, action: #selector(calculateButtonAction(_ :)), for: .touchUpInside)
         view.addSubview(button)
     }
     
@@ -115,8 +115,12 @@ class ViewController: UIViewController {
     	
     @objc
     private func calculateButtonAction(_ : UIButton) {
-        guard let textFirstValueTextField = firstValueTextField.text, let numberFirstValueTextField = Int(textFirstValueTextField) else { return }
-        guard let textSecondValueTextField = secondValueTextField.text, let numberSecondValueTextField = Int(textSecondValueTextField) else { return }
+        guard
+            let textFirstValueTextField = firstValueTextField.text,
+            let numberFirstValueTextField = Int(textFirstValueTextField) else { return }
+        guard
+            let textSecondValueTextField = secondValueTextField.text,
+            let numberSecondValueTextField = Int(textSecondValueTextField) else { return }
         let sumValues = String(numberFirstValueTextField+numberSecondValueTextField)
         callSumResultAlert(sumValues)
     }
