@@ -13,8 +13,31 @@ class ViewController: UIViewController {
     
     // MARK: - Internal methods
     
-    let massArray = ["kg", "t", "g", "mkg"]
-    let lengthArray = ["mm", "cm", "m"]
+    let massArray = [
+        Mass.kg.rawValue,
+        Mass.t.rawValue,
+        Mass.g.rawValue,
+        Mass.N.rawValue
+    ]
+    
+    let lengthArray = [
+        Length.mm.rawValue,
+        Length.cm.rawValue,
+        Length.m.rawValue,
+    ]
+    
+    enum Mass: String {
+        case kg = "kg"
+        case t = "t"
+        case g = "g"
+        case N = "N"
+    }
+    
+    enum Length: String {
+        case mm = "mm"
+        case cm = "cm"
+        case m = "m"
+    }
     
     // MARK: - Lifecycle
     
@@ -89,7 +112,6 @@ class ViewController: UIViewController {
         textField.frame = CGRect(x: 250, y: 100, width: 100, height: 40)
         textField.placeholder = "0"
         view.addSubview(textField)
-
     }
     
     private func configureSecondValueTextField(_ textField: UITextField) {
@@ -138,6 +160,7 @@ class ViewController: UIViewController {
         dimensionButton.isEnabled = false
         configurePicker(lengthPicker)
     }
+    
 }
     
 extension ViewController: UIPickerViewDelegate {
