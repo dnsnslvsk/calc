@@ -26,19 +26,6 @@ class ViewController: UIViewController {
         Length.m.rawValue,
     ]
     
-    enum Mass: String {
-        case kg = "kg"
-        case t = "t"
-        case g = "g"
-        case N = "N"
-    }
-    
-    enum Length: String {
-        case mm = "mm"
-        case cm = "cm"
-        case m = "m"
-    }
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -71,8 +58,8 @@ class ViewController: UIViewController {
     
     // MARK: - Configure
     
-    func configure () {
-        configureFirstLabel(firstLabel)
+    func configure() {
+        configureFirstLabel()
         configureSecondLabel(secondLabel)
         configureDimensionButton(dimensionButton)
         configureDimensionTextField(dimensionTextField)
@@ -81,10 +68,10 @@ class ViewController: UIViewController {
         configureCalculateButton(calculateButton)
     }
     
-    private func configureFirstLabel(_ label: UILabel) {
-        label.text = "Parameter X"
-        label.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
-        view.addSubview(label)
+    private func configureFirstLabel() {
+        firstLabel.text = "Parameter X"
+        firstLabel.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
+        view.addSubview(firstLabel)
     }
     
     private func configureSecondLabel(_ label: UILabel) {
@@ -201,5 +188,28 @@ extension ViewController: UIPickerViewDataSource {
         dimensionTextField.isEnabled = true
         dimensionButton.isEnabled = true
         picker.isHidden = true
+    }
+}
+
+extension ViewController {
+    
+    //MARK: - Mass dimensions
+    
+    enum Mass: String {
+        case kg = "kg"
+        case t = "t"
+        case g = "g"
+        case N = "N"
+    }
+}
+
+extension ViewController {
+    
+    //MARK: - Lenght dimensions
+    
+    enum Length: String {
+        case mm = "mm"
+        case cm = "cm"
+        case m = "m"
     }
 }
