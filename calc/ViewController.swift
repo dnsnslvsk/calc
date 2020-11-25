@@ -14,16 +14,16 @@ class ViewController: UIViewController {
     // MARK: - Internal methods
     
     let massArray = [
-        Mass.kg.rawValue,
-        Mass.t.rawValue,
-        Mass.g.rawValue,
-        Mass.N.rawValue
+        Mass.kg,
+        Mass.t,
+        Mass.g,
+        Mass.N
     ]
     
     let lengthArray = [
-        Length.mm.rawValue,
-        Length.cm.rawValue,
-        Length.m.rawValue,
+        Length.mm,
+        Length.cm,
+        Length.m,
     ]
     
     // MARK: - Lifecycle
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
     
     private func configureDimensionButton(_ button: UIButton) {
         button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
-        let name = massArray[0]
+        let name = massArray[0].rawValue
         button.setTitle(name, for: .normal)
         dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
         view.addSubview(button)
@@ -90,7 +90,7 @@ class ViewController: UIViewController {
     
     private func configureDimensionTextField(_ textField: UITextField) {
         textField.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
-        dimensionTextField.text = lengthArray[0]
+        dimensionTextField.text = lengthArray[0].rawValue
         dimensionTextField.addTarget(self, action: #selector(dimensionTextFieldAction(_ :)), for: .allTouchEvents)
         view.addSubview(textField)
     }
@@ -173,17 +173,17 @@ extension ViewController: UIPickerViewDataSource {
     
     func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if picker === massPicker {
-            return massArray[row]
+            return massArray[row].rawValue
         } else if picker === lengthPicker {
-            return lengthArray[row]
+            return lengthArray[row].rawValue
         } else { return "" }
     }
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if picker === massPicker {
-            dimensionButton.setTitle(massArray[row], for: .normal)
+            dimensionButton.setTitle(massArray[row].rawValue, for: .normal)
         } else if picker === lengthPicker {
-            dimensionTextField.text = lengthArray[row]
+            dimensionTextField.text = lengthArray[row].rawValue
         }
         dimensionTextField.isEnabled = true
         dimensionButton.isEnabled = true
