@@ -12,7 +12,6 @@ class ButtonFactory {
     
     static func makeButton() -> UIButton {
         let button = UIButton()
-        button.backgroundColor = .secondaryLabel
         button.setTitleColor(.label, for: .normal)
         return button
     }
