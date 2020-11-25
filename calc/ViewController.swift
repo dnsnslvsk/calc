@@ -9,100 +9,207 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
+class ViewController: UIViewController {
     
-    let dataPickerMassArray = ["kg", "t", "g", "mkg"]
-    let dataPickerLenghtArray = ["mm", "cm", "m"]
-    let textFieldDValue1 = TexfFieldFactory.makeTextField(frame: CGRect(x: 250, y: 100, width: 100, height: 40), name: "0")
-    let textFieldDValue2 = TexfFieldFactory.makeTextField(frame: CGRect(x: 250, y: 150, width: 100, height: 40), name: "0")
-    let textFieldDimension = TexfFieldFactory.makeTextField(frame: CGRect(x: 120, y: 150, width: 100, height: 40), name: "1")
-    lazy var buttonDimension = ButtonFactory.makeButton(frame: CGRect(x: 120, y: 100, width: 100, height: 40), name: dataPickerMassArray[0]) //"name:dataPickerMassArray[0]" with help of "lazy var" ok? OR NOT
-    let buttonCalculate = ButtonFactory.makeButton(frame: CGRect(x: 150, y: 400, width: 100, height: 40), name: "Calculate")
-    lazy var pickerMass = PickerFactory.makePicker(frame: CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)) //"view.bounds.width" with help of "lazy var" ok? OR NOT
-    lazy var pickerLengt = PickerFactory.makePicker(frame: CGRect(x: 0, y: 550, width: view.bounds.width, height: 100))
+    // MARK: - Internal methods
     
-    func numberOfComponents(in pickerMass: UIPickerView) -> Int {
-        return 1
-    }
+    let massArray = [
+        Mass.kg,
+        Mass.t,
+        Mass.g,
+        Mass.N
+    ]
     
-    func pickerView(_ pickerMass: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if isButtonCallPickerClicked == true {
-            return dataPickerMassArray.count
-        }
-        if isTextFieldDimensionClicked == true {
-            return dataPickerLenghtArray.count
-        }
-        return 0
-    }
+    let lengthArray = [
+        Length.mm,
+        Length.cm,
+        Length.m,
+    ]
     
-    func pickerView(_ pickerMass: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if isButtonCallPickerClicked == true {
-            return dataPickerMassArray[row]
-        }
-        if isTextFieldDimensionClicked == true {
-            return dataPickerLenghtArray[row]
-        }
-        return ""
-    }
-    
-    func pickerView(_ pickerMass: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if isButtonCallPickerClicked == true {
-            buttonDimension.setTitle(dataPickerMassArray[row], for: .normal)
-            isButtonCallPickerClicked = false
-            pickerMass.isHidden = true
-            textFieldDimension.isUserInteractionEnabled = true
-        }
-        if isTextFieldDimensionClicked == true {
-            textFieldDimension.text = dataPickerLenghtArray[row]
-            isTextFieldDimensionClicked = false
-            pickerLengt.isHidden = true
-            buttonDimension.isUserInteractionEnabled = true
-        }
-    }
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(textFieldDValue1)
-        view.addSubview(textFieldDValue2)
-        textFieldDimension.text = dataPickerLenghtArray[0]
-        view.addSubview(textFieldDimension)
-        textFieldDimension.addTarget(self, action: #selector(textFieldCallPicker (_ :)), for: .allTouchEvents)
-        view.addSubview(LableFactory.makeLable(frame: CGRect(x: 10, y: 100, width: 100, height: 40), name: "parameter A"))
-        view.addSubview(LableFactory.makeLable(frame: CGRect(x: 10, y: 150, width: 100, height: 40), name: "parameter B"))
-        view.addSubview(buttonDimension)
-        buttonDimension.addTarget(self, action: #selector(buttonCallPicker (_ :)), for: .touchUpInside)
-        view.addSubview(buttonCalculate)
-        buttonCalculate.addTarget(self, action: #selector(buttonCalculating (_ :)), for: .touchUpInside)
-        pickerMass.delegate = self
-        pickerMass.dataSource = self
-        pickerLengt.delegate = self
-        pickerLengt.dataSource = self
+        configure()
+        massPicker.delegate = self
+        massPicker.dataSource = self
+        lengthPicker.delegate = self
+        lengthPicker.dataSource = self
     }
     
-    @objc func buttonCalculating (_ : UIButton) {
-        //guard textFieldDValue1.text != nil && textFieldDValue2.text != nil else {return}  it doesnt work lolwat
-        guard let textTextFieldDValue1 = textFieldDValue1.text, let numberTextFieldDValue1 = Int(textTextFieldDValue1) else {return}
-        guard let textTextFieldDValue2 = textFieldDValue2.text, let numberTextFieldDValue2 = Int(textTextFieldDValue2) else {return}
-        let sum = numberTextFieldDValue1+numberTextFieldDValue2
-        let alert = UIAlertController(title: "The sum is", message: String(sum), preferredStyle: .alert)
+    // MARK: - Public methods
+    
+    let firstLabel = LabelFactory.makeLabel()
+    let secondLabel = LabelFactory.makeLabel()
+    let dimensionButton = ButtonFactory.makeButton()
+    let dimensionTextField = TexfFieldFactory.makeTextField()
+    let firstValueTextField = TexfFieldFactory.makeTextField()
+    let secondValueTextField = TexfFieldFactory.makeTextField()
+    let calculateButton = ButtonFactory.makeButton()
+    let massPicker = PickerFactory.makePicker()
+    let lengthPicker = PickerFactory.makePicker()
+    
+    private func callSumResultAlert(_ sum: String) {
+        let alert = UIAlertController(title: "The sum is", message: sum, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Good", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Not good", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
-    var isButtonCallPickerClicked = false
-    @objc func buttonCallPicker (_ : UIButton) {
-        isButtonCallPickerClicked = true
-        pickerMass.isHidden = false
-        textFieldDimension.isUserInteractionEnabled = false
-        self.view.addSubview(pickerMass) //blya pochemy self
+    // MARK: - Configure
+    
+    func configure() {
+        configureFirstLabel()
+        configureSecondLabel(secondLabel)
+        configureDimensionButton(dimensionButton)
+        configureDimensionTextField(dimensionTextField)
+        configureFirstValueTextField(firstValueTextField)
+        configureSecondValueTextField(secondValueTextField)
+        configureCalculateButton(calculateButton)
     }
     
-    var isTextFieldDimensionClicked = false
-    @objc func textFieldCallPicker (_ : UITextField) {
-        isTextFieldDimensionClicked = true
-        pickerLengt.isHidden = false
-        buttonDimension.isUserInteractionEnabled = false
-        self.view.addSubview(pickerLengt) //blya pochemy self nago guglit' ponimat'
+    private func configureFirstLabel() {
+        firstLabel.text = "Parameter X"
+        firstLabel.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
+        view.addSubview(firstLabel)
+    }
+    
+    private func configureSecondLabel(_ label: UILabel) {
+        label.text = "Parameter Y"
+        label.frame = CGRect(x: 10, y: 150, width: 100, height: 40)
+        view.addSubview(label)
+    }
+    
+    private func configureDimensionButton(_ button: UIButton) {
+        button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
+        let name = massArray[0].rawValue
+        button.setTitle(name, for: .normal)
+        dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    private func configureDimensionTextField(_ textField: UITextField) {
+        textField.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
+        dimensionTextField.text = lengthArray[0].rawValue
+        dimensionTextField.addTarget(self, action: #selector(dimensionTextFieldAction(_ :)), for: .allTouchEvents)
+        view.addSubview(textField)
+    }
+    
+    private func configureFirstValueTextField(_ textField: UITextField) {
+        textField.frame = CGRect(x: 250, y: 100, width: 100, height: 40)
+        textField.placeholder = "0"
+        view.addSubview(textField)
+    }
+    
+    private func configureSecondValueTextField(_ textField: UITextField) {
+        textField.frame = CGRect(x: 250, y: 150, width: 100, height: 40)
+        textField.placeholder = "0"
+        view.addSubview(textField)
+    }
+    
+    private func configureCalculateButton(_ button: UIButton) {
+        button.frame = CGRect(x: 150, y: 400, width: 100, height: 40)
+        let name = "Calculate"
+        button.setTitle(name, for: .normal)
+        calculateButton.addTarget(self, action: #selector(calculateButtonAction(_ :)), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    private func configurePicker(_ picker: UIPickerView) {
+        picker.frame = CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)
+        view.addSubview(picker)
+    }
+    
+    // MARK: - Actions
+    	
+    @objc
+    private func calculateButtonAction(_ : UIButton) {
+        guard
+            let textFirstValueTextField = firstValueTextField.text,
+            let numberFirstValueTextField = Int(textFirstValueTextField) else { return }
+        guard
+            let textSecondValueTextField = secondValueTextField.text,
+            let numberSecondValueTextField = Int(textSecondValueTextField) else { return }
+        let sumValues = String(numberFirstValueTextField+numberSecondValueTextField)
+        callSumResultAlert(sumValues)
+    }
+    
+    @objc
+    private func dimensionButtonAction(_ : UIButton) {
+        massPicker.isHidden = false
+        dimensionTextField.isEnabled = false
+        configurePicker(massPicker)
+    }
+    
+    @objc
+    private func dimensionTextFieldAction(_ : UITextField) {
+        lengthPicker.isHidden = false
+        dimensionButton.isEnabled = false
+        configurePicker(lengthPicker)
+    }
+    
+}
+    
+extension ViewController: UIPickerViewDelegate {
+    
+    // MARK: - UIPickerViewDelegate implementation
+    
+    func numberOfComponents(in picker: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ picker: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if picker === massPicker {
+            return massArray.count
+        } else if picker === lengthPicker {
+            return lengthArray.count
+        } else { return 0 }
+    }
+}
+
+extension ViewController: UIPickerViewDataSource {
+    
+    // MARK: - UIPickerViewDataSource implementation
+    
+    func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if picker === massPicker {
+            return massArray[row].rawValue
+        } else if picker === lengthPicker {
+            return lengthArray[row].rawValue
+        } else { return "" }
+    }
+    
+    func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if picker === massPicker {
+            dimensionButton.setTitle(massArray[row].rawValue, for: .normal)
+        } else if picker === lengthPicker {
+            dimensionTextField.text = lengthArray[row].rawValue
+        }
+        dimensionTextField.isEnabled = true
+        dimensionButton.isEnabled = true
+        picker.isHidden = true
+    }
+}
+
+extension ViewController {
+    
+    //MARK: - Mass dimensions
+    
+    enum Mass: String {
+        case kg = "kg"
+        case t = "t"
+        case g = "g"
+        case N = "N"
+    }
+}
+
+extension ViewController {
+    
+    //MARK: - Lenght dimensions
+    
+    enum Length: String {
+        case mm = "mm"
+        case cm = "cm"
+        case m = "m"
     }
 }
