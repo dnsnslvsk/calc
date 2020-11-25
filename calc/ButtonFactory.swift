@@ -9,11 +9,11 @@
 import UIKit
 
 class ButtonFactory {
-    static func makeButton(frame: CGRect, name: String) -> UIButton {
+    
+    static func makeButton() -> UIButton {
         let button = UIButton()
-        button.frame = frame
-        button.backgroundColor = UIColor.black
-        button.setTitle(name, for: .normal)
+        button.backgroundColor = .secondaryLabel
+        button.setTitleColor(.label, for: .normal)
         return button
     }
 }
