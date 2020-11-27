@@ -26,7 +26,18 @@ class ViewController: UIViewController {
         Length.m,
     ]
     
-    // MARK: - Lifecycle
+    lazy var objects = [
+        CellFactory.cellModel(
+            parameterLabel: firstLabel,
+            dimensionButton: firstDimensionButton,
+            inputTextField: firstValueTextField),
+        CellFactory.cellModel(
+            parameterLabel: secondLabel,
+            dimensionButton: secondDimensionButton,
+            inputTextField: secondValueTextField)
+    ]
+    
+        // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,19 +46,24 @@ class ViewController: UIViewController {
         massPicker.dataSource = self
         lengthPicker.delegate = self
         lengthPicker.dataSource = self
+        calculatorTable.delegate = self
+        calculatorTable.dataSource = self
     }
     
     // MARK: - Public methods
     
     let firstLabel = LabelFactory.makeLabel()
     let secondLabel = LabelFactory.makeLabel()
-    let dimensionButton = ButtonFactory.makeButton()
+    let firstDimensionButton = ButtonFactory.makeButton()
+    let secondDimensionButton = ButtonFactory.makeButton()
+
     let dimensionTextField = TexfFieldFactory.makeTextField()
     let firstValueTextField = TexfFieldFactory.makeTextField()
     let secondValueTextField = TexfFieldFactory.makeTextField()
     let calculateButton = ButtonFactory.makeButton()
     let massPicker = PickerFactory.makePicker()
     let lengthPicker = PickerFactory.makePicker()
+    let calculatorTable = TableFactory.makeTable()
     
     private func callSumResultAlert(_ sum: String) {
         let alert = UIAlertController(title: "The sum is", message: sum, preferredStyle: .alert)
@@ -56,44 +72,65 @@ class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    // MARK: - Internal methods
+    
+    enum Constant {
+        static let tableViewEstimatedRowHeight = 50
+    }
+    
     // MARK: - Configure
     
     func configure() {
         configureFirstLabel()
         configureSecondLabel(secondLabel)
-        configureDimensionButton(dimensionButton)
-        configureDimensionTextField(dimensionTextField)
+        configureFirstDimensionButton(firstDimensionButton)
+        configureSecondDimensionButton(secondDimensionButton)
+        
+        //configureDimensionTextField(dimensionTextField)
         configureFirstValueTextField(firstValueTextField)
         configureSecondValueTextField(secondValueTextField)
         configureCalculateButton(calculateButton)
+        configureTable(calculatorTable)
+        
     }
     
     private func configureFirstLabel() {
         firstLabel.text = "Parameter X"
-        firstLabel.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
+        //firstLabel.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
         view.addSubview(firstLabel)
     }
     
     private func configureSecondLabel(_ label: UILabel) {
         label.text = "Parameter Y"
-        label.frame = CGRect(x: 10, y: 150, width: 100, height: 40)
+        //label.frame = CGRect(x: 10, y: 150, width: 100, height: 40)
         view.addSubview(label)
     }
     
-    private func configureDimensionButton(_ button: UIButton) {
+    private func configureFirstDimensionButton(_ button: UIButton) {
         button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
         let name = massArray[0].rawValue
         button.setTitle(name, for: .normal)
-        dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
+        firstDimensionButton.addTarget(self, action: #selector(firstDimensionButtonAction(_ :)), for: .touchUpInside)
         view.addSubview(button)
     }
     
+    private func configureSecondDimensionButton(_ button: UIButton) {
+        button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
+        let name = lengthArray[0].rawValue
+        button.setTitle(name, for: .normal)
+        firstDimensionButton.addTarget(self, action: #selector(secondDimensionButtonAction(_ :)), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    /*
     private func configureDimensionTextField(_ textField: UITextField) {
         textField.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
         dimensionTextField.text = lengthArray[0].rawValue
-        dimensionTextField.addTarget(self, action: #selector(dimensionTextFieldAction(_ :)), for: .allTouchEvents)
+        dimensionTextField.addTarget(self, action: #selector(secondDimensionButtonAction(_ :)), for: .allTouchEvents)
         view.addSubview(textField)
     }
+    */
     
     private func configureFirstValueTextField(_ textField: UITextField) {
         textField.frame = CGRect(x: 250, y: 100, width: 100, height: 40)
@@ -108,7 +145,7 @@ class ViewController: UIViewController {
     }
     
     private func configureCalculateButton(_ button: UIButton) {
-        button.frame = CGRect(x: 150, y: 400, width: 100, height: 40)
+        button.frame = CGRect(x: 150, y: 300, width: 100, height: 40)
         let name = "Calculate"
         button.setTitle(name, for: .normal)
         calculateButton.addTarget(self, action: #selector(calculateButtonAction(_ :)), for: .touchUpInside)
@@ -119,6 +156,15 @@ class ViewController: UIViewController {
         picker.frame = CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)
         view.addSubview(picker)
     }
+    
+    
+    private func configureTable(_ table: UITableView) {
+        table.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 150)
+        calculatorTable.register(CellFactory.self, forCellReuseIdentifier: "cell")
+        view.addSubview(table)
+    }
+    
+    
     
     // MARK: - Actions
     	
@@ -135,16 +181,16 @@ class ViewController: UIViewController {
     }
     
     @objc
-    private func dimensionButtonAction(_ : UIButton) {
+    private func firstDimensionButtonAction(_ : UIButton) {
         massPicker.isHidden = false
-        dimensionTextField.isEnabled = false
+        secondDimensionButton.isEnabled = false
         configurePicker(massPicker)
     }
     
     @objc
-    private func dimensionTextFieldAction(_ : UITextField) {
+    private func secondDimensionButtonAction(_ : UIButton) {
         lengthPicker.isHidden = false
-        dimensionButton.isEnabled = false
+        firstDimensionButton.isEnabled = false
         configurePicker(lengthPicker)
     }
     
@@ -181,15 +227,43 @@ extension ViewController: UIPickerViewDataSource {
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if picker === massPicker {
-            dimensionButton.setTitle(massArray[row].rawValue, for: .normal)
+            firstDimensionButton.setTitle(massArray[row].rawValue, for: .normal)
         } else if picker === lengthPicker {
-            dimensionTextField.text = lengthArray[row].rawValue
+            secondDimensionButton.setTitle(lengthArray[row].rawValue, for: .normal)
         }
-        dimensionTextField.isEnabled = true
-        dimensionButton.isEnabled = true
+        firstDimensionButton.isEnabled = true
+        secondDimensionButton.isEnabled = true
         picker.isHidden = true
     }
 }
+
+extension ViewController: UITableViewDelegate {
+    
+    // MARK: - UITableViewDelegate implementation
+    
+}
+
+extension ViewController: UITableViewDataSource{
+    
+    // MARK: - UITableViewDataSource implementation
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CellFactory
+        cell.set(objects[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView,
+             heightForRowAt indexPath: IndexPath) -> Int {
+        return Constant.tableViewEstimatedRowHeight
+     }
+    
+}
+
 
 extension ViewController {
     
