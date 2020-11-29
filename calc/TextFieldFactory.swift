@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TexfFieldFactory {
+final class TexfFieldFactory {
     
     static func makeTextField() -> UITextField {
         let textField =  UITextField()

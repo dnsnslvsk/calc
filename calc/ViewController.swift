@@ -9,7 +9,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     // MARK: - Internal methods
     
@@ -25,16 +25,10 @@ class ViewController: UIViewController {
         Length.cm,
         Length.m,
     ]
-    
-    lazy var objects = [
-        CellFactory.cellModel(
-            parameterLabel: firstLabel,
-            dimensionButton: firstDimensionButton,
-            inputTextField: firstValueTextField),
-        CellFactory.cellModel(
-            parameterLabel: secondLabel,
-            dimensionButton: secondDimensionButton,
-            inputTextField: secondValueTextField)
+
+    let parameterNameArray = [
+        "Par X",
+        "Par Y"
     ]
     
         // MARK: - Lifecycle
@@ -52,11 +46,8 @@ class ViewController: UIViewController {
     
     // MARK: - Public methods
     
-    let firstLabel = LabelFactory.makeLabel()
-    let secondLabel = LabelFactory.makeLabel()
     let firstDimensionButton = ButtonFactory.makeButton()
     let secondDimensionButton = ButtonFactory.makeButton()
-
     let dimensionTextField = TexfFieldFactory.makeTextField()
     let firstValueTextField = TexfFieldFactory.makeTextField()
     let secondValueTextField = TexfFieldFactory.makeTextField()
@@ -82,31 +73,14 @@ class ViewController: UIViewController {
     // MARK: - Configure
     
     func configure() {
-        configureFirstLabel()
-        configureSecondLabel(secondLabel)
         configureFirstDimensionButton(firstDimensionButton)
         configureSecondDimensionButton(secondDimensionButton)
-        
-        //configureDimensionTextField(dimensionTextField)
         configureFirstValueTextField(firstValueTextField)
         configureSecondValueTextField(secondValueTextField)
         configureCalculateButton(calculateButton)
         configureTable(calculatorTable)
-        
     }
-    
-    private func configureFirstLabel() {
-        firstLabel.text = "Parameter X"
-        //firstLabel.frame = CGRect(x: 10, y: 100, width: 100, height: 40)
-        view.addSubview(firstLabel)
-    }
-    
-    private func configureSecondLabel(_ label: UILabel) {
-        label.text = "Parameter Y"
-        //label.frame = CGRect(x: 10, y: 150, width: 100, height: 40)
-        view.addSubview(label)
-    }
-    
+
     private func configureFirstDimensionButton(_ button: UIButton) {
         button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
         let name = massArray[0].rawValue
@@ -123,15 +97,6 @@ class ViewController: UIViewController {
         view.addSubview(button)
     }
     
-    /*
-    private func configureDimensionTextField(_ textField: UITextField) {
-        textField.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
-        dimensionTextField.text = lengthArray[0].rawValue
-        dimensionTextField.addTarget(self, action: #selector(secondDimensionButtonAction(_ :)), for: .allTouchEvents)
-        view.addSubview(textField)
-    }
-    */
-    
     private func configureFirstValueTextField(_ textField: UITextField) {
         textField.frame = CGRect(x: 250, y: 100, width: 100, height: 40)
         textField.placeholder = "0"
@@ -143,7 +108,7 @@ class ViewController: UIViewController {
         textField.placeholder = "0"
         view.addSubview(textField)
     }
-    
+ 
     private func configureCalculateButton(_ button: UIButton) {
         button.frame = CGRect(x: 150, y: 300, width: 100, height: 40)
         let name = "Calculate"
@@ -153,7 +118,7 @@ class ViewController: UIViewController {
     }
     
     private func configurePicker(_ picker: UIPickerView) {
-        picker.frame = CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)
+        //picker.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 100)
         view.addSubview(picker)
     }
     
@@ -196,7 +161,7 @@ class ViewController: UIViewController {
     
 }
     
-extension ViewController: UIPickerViewDelegate {
+extension ViewController: UIPickerViewDataSource {
     
     // MARK: - UIPickerViewDelegate implementation
     
@@ -213,7 +178,7 @@ extension ViewController: UIPickerViewDelegate {
     }
 }
 
-extension ViewController: UIPickerViewDataSource {
+extension ViewController: UIPickerViewDelegate {
     
     // MARK: - UIPickerViewDataSource implementation
     
@@ -253,7 +218,9 @@ extension ViewController: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CellFactory
-        cell.set(objects[indexPath.row])
+        cell.delegate = self
+        cell.setNameParameterLabel(parameterNameArray[indexPath.row])
+        cell.setNameDimensionButton()
         return cell
     }
     
@@ -263,6 +230,21 @@ extension ViewController: UITableViewDataSource{
      }
     
 }
+
+
+
+extension ViewController: ISetPicker{
+    
+    // MARK: - ISetPicker implementation
+    
+    func callPicker() -> UIPickerView {
+        view.addSubview(massPicker)
+        return massPicker
+    }
+    
+}
+
+
 
 
 extension ViewController {

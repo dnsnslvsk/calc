@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ButtonFactory {
+final class ButtonFactory {
     
     static func makeButton() -> UIButton {
         let button = UIButton()

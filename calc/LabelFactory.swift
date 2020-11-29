@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LabelFactory {
+final class LabelFactory {
     
     static func makeLabel() -> UILabel {
         let label = UILabel()

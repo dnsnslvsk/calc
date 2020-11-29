@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableFactory: UITableView {
+final class TableFactory: UITableView {
     
     static func makeTable() -> UITableView {
         let table = UITableView()
