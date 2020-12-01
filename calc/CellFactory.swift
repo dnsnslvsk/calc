@@ -29,14 +29,7 @@ final class CellFactory: UITableViewCell {
     
     func setNameDimensionButton() {
     }
-    
-    
-    
-
-
-
-    
-    
+        
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -59,5 +52,5 @@ final class CellFactory: UITableViewCell {
 }
 
 protocol ISetPicker {
-    func callPicker() -> UIPickerView
+    func callPicker()
 }
