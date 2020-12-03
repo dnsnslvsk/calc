@@ -9,12 +9,15 @@
 import UIKit
 
 final class Cell: UITableViewCell {
-
+    
+    
+    var mode: Mode?
+    
     var delegate: ISetPicker?
     
     @objc
     private func dimensionButtonAction(_ : UIButton) {
-        delegate!.callPicker()
+        delegate?.callPicker(self)
     }
     
     
@@ -33,7 +36,8 @@ final class Cell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        parameterLabel.frame = CGRect(x: 0, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        parameterLabel.frame = CGRect(x: 10, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        parameterLabel.textAlignment = .left
         addSubview(parameterLabel)
 
         dimensionButton.setTitle("dimension", for: .normal)
@@ -52,5 +56,5 @@ final class Cell: UITableViewCell {
 }
 
 protocol ISetPicker {
-    func callPicker()
+    func callPicker(_ cell: Cell)
 }

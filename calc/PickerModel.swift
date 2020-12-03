@@ -10,7 +10,15 @@ import Foundation
 
 
 struct PickerModel {
-    var mode: String
+    var mode: Mode
     var dataSourceArray: [String]
     var parameterName: String
+}
+
+    
+    //MARK: - Lenght dimensions
+    
+enum Mode {
+    case mass
+    case length
 }

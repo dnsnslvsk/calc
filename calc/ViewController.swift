@@ -13,35 +13,20 @@ final class ViewController: UIViewController {
     
     // MARK: - Internal methods
     
-    lazy var objectDataSourceArray = [
+    lazy var models = [
         PickerModel(mode: .mass, dataSourceArray: [
             Mass.kg.rawValue,
             Mass.t.rawValue,
             Mass.g.rawValue,
             Mass.N.rawValue
-        ], parameterName: "Par X"),
-        PickerModel(dataSourceArray: lengthArray)
+        ], parameterName: "Сила, F"),
+        PickerModel(mode: .length, dataSourceArray: [
+            Length.mm.rawValue,
+            Length.cm.rawValue,
+            Length.m.rawValue,
+        ], parameterName: "Длина, L")
     ]
-    lazy var currentObjectDataSourceArray = objectDataSourceArray[0]
-
-    
-    let massArray = [
-        Mass.kg.rawValue,
-        Mass.t.rawValue,
-        Mass.g.rawValue,
-        Mass.N.rawValue
-    ]
-    
-    let lengthArray = [
-        Length.mm.rawValue,
-        Length.cm.rawValue,
-        Length.m.rawValue,
-    ]
-
-    let parameterNameArray = [
-        "Par X",
-        "Par Y"
-    ]
+    lazy var currentModel = models[0]
     
         // MARK: - Lifecycle
     
@@ -82,40 +67,10 @@ final class ViewController: UIViewController {
     // MARK: - Configure
     
     func configure() {
-        configureFirstDimensionButton(firstDimensionButton)
-        configureSecondDimensionButton(secondDimensionButton)
-        configureFirstValueTextField(firstValueTextField)
-        configureSecondValueTextField(secondValueTextField)
         configureCalculateButton(calculateButton)
         configureTable(calculatorTable)
     }
-    private func configureFirstDimensionButton(_ button: UIButton) {
-        button.frame = CGRect(x: 120, y: 100, width: 100, height: 40)
-        let name = massArray[0]
-        button.setTitle(name, for: .normal)
-        firstDimensionButton.addTarget(self, action: #selector(firstDimensionButtonAction(_ :)), for: .touchUpInside)
-        view.addSubview(button)
-    }
-    
-    private func configureSecondDimensionButton(_ button: UIButton) {
-        button.frame = CGRect(x: 120, y: 150, width: 100, height: 40)
-        let name = lengthArray[0]
-        button.setTitle(name, for: .normal)
-        secondDimensionButton.addTarget(self, action: #selector(secondDimensionButtonAction(_ :)), for: .touchUpInside)
-        view.addSubview(button)
-    }
-    
-    private func configureFirstValueTextField(_ textField: UITextField) {
-        textField.frame = CGRect(x: 250, y: 100, width: 100, height: 40)
-        textField.placeholder = "0"
-        view.addSubview(textField)
-    }
-    
-    private func configureSecondValueTextField(_ textField: UITextField) {
-        textField.frame = CGRect(x: 250, y: 150, width: 100, height: 40)
-        textField.placeholder = "0"
-        view.addSubview(textField)
-    }
+
     private func configureCalculateButton(_ button: UIButton) {
         button.frame = CGRect(x: 150, y: 300, width: 100, height: 40)
         let name = "Calculate"
@@ -152,14 +107,8 @@ final class ViewController: UIViewController {
         callSumResultAlert(sumValues)
     }
     
-    @objc
-    private func firstDimensionButtonAction(_ : UIButton) {
-        currentObjectDataSourceArray = objectDataSourceArray[0]
-        picker.isHidden = false
-        configurePicker(picker)
-        picker.reloadAllComponents()
-    }
-    
+
+    /*
     @objc
     private func secondDimensionButtonAction(_ : UIButton) {
         currentObjectDataSourceArray = objectDataSourceArray[1]
@@ -167,7 +116,7 @@ final class ViewController: UIViewController {
         configurePicker(picker)
         picker.reloadAllComponents()
     }
-    
+    */
 }
 
     
@@ -180,7 +129,7 @@ extension ViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ picker: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-         return currentObjectDataSourceArray.dataSourceArray.count
+         return currentModel.dataSourceArray.count
     }
 }
 
@@ -189,15 +138,18 @@ extension ViewController: UIPickerViewDelegate {
     // MARK: - UIPickerViewDataSource implementation
     
     func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return currentObjectDataSourceArray.dataSourceArray[row]
+        return currentModel.dataSourceArray[row]
     }
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        /*
         if currentObjectDataSourceArray.dataSourceArray == objectDataSourceArray[0].dataSourceArray {
             firstDimensionButton.setTitle(massArray[row], for: .normal)
         } else if currentObjectDataSourceArray.dataSourceArray == objectDataSourceArray[1].dataSourceArray {
             secondDimensionButton.setTitle(lengthArray[row], for: .normal)
         }
+        */
+        
         picker.isHidden = true
     }
     
@@ -214,14 +166,14 @@ extension ViewController: UITableViewDataSource{
     // MARK: - UITableViewDataSource implementation
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return parameterNameArray.count
+        return models.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! Cell
         cell.delegate = self
-        cell.setNameParameterLabel(parameterNameArray[indexPath.row])
-        cell.setNameDimensionButton()
+        let model = models[indexPath.row]
+        cell.setNameParameterLabel(models[indexPath.row].parameterName)
         return cell
     }
     
@@ -238,8 +190,12 @@ extension ViewController: ISetPicker{
     
     // MARK: - ISetPicker implementation
     
-    func callPicker() {
-        view.addSubview(picker)
+    func callPicker(_ cell: Cell) {
+        guard
+        let newCurrentMode = cell.mode,
+        let newCurrentModel = models.first(where: { $0.mode == newCurrentMode }) else { return }
+        
+        //view.addSubview(picker)
     }
     
 }
@@ -270,13 +226,5 @@ extension ViewController {
     }
 }
 
-extension ViewController {
-    
-    //MARK: - Lenght dimensions
-    
-    enum Mode: String {
-        case mm = "mm"
-        case cm = "cm"
-        case m = "m"
-    }
-}
+
+
