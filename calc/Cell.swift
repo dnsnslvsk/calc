@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CellFactory: UITableViewCell {
+final class Cell: UITableViewCell {
 
     var delegate: ISetPicker?
     

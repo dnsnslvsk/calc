@@ -14,7 +14,12 @@ final class ViewController: UIViewController {
     // MARK: - Internal methods
     
     lazy var objectDataSourceArray = [
-        PickerModel(dataSourceArray: massArray),
+        PickerModel(mode: .mass, dataSourceArray: [
+            Mass.kg.rawValue,
+            Mass.t.rawValue,
+            Mass.g.rawValue,
+            Mass.N.rawValue
+        ], parameterName: "Par X"),
         PickerModel(dataSourceArray: lengthArray)
     ]
     lazy var currentObjectDataSourceArray = objectDataSourceArray[0]
@@ -127,7 +132,7 @@ final class ViewController: UIViewController {
     
     private func configureTable(_ table: UITableView) {
         table.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 100)
-        calculatorTable.register(CellFactory.self, forCellReuseIdentifier: "cell")
+        calculatorTable.register(Cell.self, forCellReuseIdentifier: "cell")
         view.addSubview(table)
     }
     
@@ -213,7 +218,7 @@ extension ViewController: UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! CellFactory
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! Cell
         cell.delegate = self
         cell.setNameParameterLabel(parameterNameArray[indexPath.row])
         cell.setNameDimensionButton()
@@ -259,6 +264,17 @@ extension ViewController {
     //MARK: - Lenght dimensions
     
     enum Length: String {
+        case mm = "mm"
+        case cm = "cm"
+        case m = "m"
+    }
+}
+
+extension ViewController {
+    
+    //MARK: - Lenght dimensions
+    
+    enum Mode: String {
         case mm = "mm"
         case cm = "cm"
         case m = "m"

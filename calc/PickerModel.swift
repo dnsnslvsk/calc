@@ -10,5 +10,7 @@ import Foundation
 
 
 struct PickerModel {
+    var mode: String
     var dataSourceArray: [String]
+    var parameterName: String
 }

@@ -12,7 +12,7 @@
 		2F2400342557209600609F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F2400322557209600609F4D /* LaunchScreen.storyboard */; };
 		2F315DA92576C0020095C8BE /* PickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F315DA82576C0020095C8BE /* PickerModel.swift */; };
 		2FB2D6952571730700032B34 /* TableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2D6942571730700032B34 /* TableFactory.swift */; };
-		2FB2D6972571753E00032B34 /* CellFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2D6962571753E00032B34 /* CellFactory.swift */; };
+		2FB2D6972571753E00032B34 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2D6962571753E00032B34 /* Cell.swift */; };
 		2FC7855F255C6DA60058497B /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2FC7855E255C6DA60058497B /* .gitignore */; };
 		36D2F044255C8CA200B49765 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03D255C8CA100B49765 /* SceneDelegate.swift */; };
 		36D2F045255C8CA200B49765 /* ButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F03E255C8CA100B49765 /* ButtonFactory.swift */; };
@@ -31,7 +31,7 @@
 		2F2400352557209600609F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F315DA82576C0020095C8BE /* PickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerModel.swift; sourceTree = "<group>"; };
 		2FB2D6942571730700032B34 /* TableFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableFactory.swift; sourceTree = "<group>"; };
-		2FB2D6962571753E00032B34 /* CellFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellFactory.swift; sourceTree = "<group>"; };
+		2FB2D6962571753E00032B34 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		2FC7855E255C6DA60058497B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		36D2F03D255C8CA100B49765 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		36D2F03E255C8CA100B49765 /* ButtonFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonFactory.swift; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 				36D2F03D255C8CA100B49765 /* SceneDelegate.swift */,
 				36D2F043255C8CA200B49765 /* ViewController.swift */,
 				2F315DA82576C0020095C8BE /* PickerModel.swift */,
-				2FB2D6962571753E00032B34 /* CellFactory.swift */,
+				2FB2D6962571753E00032B34 /* Cell.swift */,
 				2FB2D6942571730700032B34 /* TableFactory.swift */,
 				36D2F042255C8CA200B49765 /* LabelFactory.swift */,
 				36D2F03E255C8CA100B49765 /* ButtonFactory.swift */,
@@ -170,7 +170,7 @@
 				2F315DA92576C0020095C8BE /* PickerModel.swift in Sources */,
 				36D2F045255C8CA200B49765 /* ButtonFactory.swift in Sources */,
 				36D2F04A255C8CA200B49765 /* ViewController.swift in Sources */,
-				2FB2D6972571753E00032B34 /* CellFactory.swift in Sources */,
+				2FB2D6972571753E00032B34 /* Cell.swift in Sources */,
 				2FB2D6952571730700032B34 /* TableFactory.swift in Sources */,
 				36D2F046255C8CA200B49765 /* PickerFactory.swift in Sources */,
 				36D2F044255C8CA200B49765 /* SceneDelegate.swift in Sources */,
