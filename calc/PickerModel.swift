@@ -12,7 +12,9 @@ import Foundation
 struct PickerModel {
     var mode: Mode
     var dataSourceArray: [String]
+    var currentButtonName: String
     var parameterName: String
+    var inputTextFieldValue: String
 }
 
     

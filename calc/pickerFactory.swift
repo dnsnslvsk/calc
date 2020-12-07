@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PickerFactory {
+class PickerFactory {
     
     static func makePicker() -> UIPickerView {
         let picker = UIPickerView()
