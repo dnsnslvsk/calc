@@ -10,7 +10,7 @@ import UIKit
 
 final class Cell: UITableViewCell {
     
-    var mode: Mode?
+    var model: PickerModel?
     var delegate: ICellDelegate?
     var inputTextFieldValue = ""
     
@@ -41,16 +41,16 @@ final class Cell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        parameterLabel.frame = CGRect(x: 10, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        parameterLabel.frame = CGRect(x: 10, y: 0, width: 205, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
         parameterLabel.textAlignment = .left
         addSubview(parameterLabel)
 
         
-        dimensionButton.frame = CGRect(x: 120, y: 0, width: 120, height:ViewController.Constant.tableViewEstimatedRowHeight-6)
+        dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height:ViewController.Constant.tableViewEstimatedRowHeight-6)
         dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
         addSubview(dimensionButton)
         
-        inputTextField.frame = CGRect(x: 240, y: 0, width: 120, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        inputTextField.frame = CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
         inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .allEditingEvents)
         inputTextField.placeholder = "0"
         addSubview(inputTextField)

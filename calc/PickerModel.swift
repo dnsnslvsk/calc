@@ -8,8 +8,11 @@
 
 import Foundation
 
-struct PickerModel {
-    
+struct PickerModel: Equatable {
+    static func == (lhs: PickerModel, rhs: PickerModel) -> Bool {
+        return rhs.id == lhs.id
+    }
+    let id = UUID()
     var parameterName: String
     var currentButtonName: CustomStringConvertible
     var mode: Mode
@@ -17,28 +20,28 @@ struct PickerModel {
     var inputTextFieldValue: String
 }
 
-    //MARK: - Dimensions
-    
+//MARK: - Dimensions
+
 enum Mode {
-    case mass
-    case length
+    case stressAndPressure
+    case diameter
 }
 
-    //MARK: - Mass dimensions
-    
-enum Mass: String, CustomStringConvertible {
-    case kg = "кг"
-    case t = "т"
-    case g = "г"
-    case N = "Н"
-var description: String { rawValue }
+//MARK: - Mass dimensions
+
+enum StressAndPressure: String, CustomStringConvertible {
+    case MPa = "МПа"
+    case Pa = "Па"
+    case psi = "psi"
+    case bar = "атм"
+    var description: String { rawValue }
 }
-    
-    //MARK: - Lenght dimensions
-    
-enum Length: String, CustomStringConvertible {
+
+//MARK: - Lenght dimensions
+
+enum Diameter: String, CustomStringConvertible {
     case mm = "мм"
-    case cm = "см"
+    case inch = "дюйм"
     case m = "м"
-var description: String { rawValue }
+    var description: String { rawValue }
 }

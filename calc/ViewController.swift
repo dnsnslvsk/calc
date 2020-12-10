@@ -8,6 +8,7 @@
 //  
 
 import UIKit
+import os
 
 final class ViewController: UIViewController {
     
@@ -15,41 +16,80 @@ final class ViewController: UIViewController {
     
     lazy var models = [
         PickerModel(
-            parameterName: "Сила, F",
-            currentButtonName: Mass.kg,
-            mode: .mass,
+            parameterName: "Больший диаметр, D1",
+            currentButtonName: Diameter.mm,
+            mode: .diameter,
             dataSourceArray: [
-             Mass.kg,
-             Mass.t,
-             Mass.g,
-             Mass.N
+             Diameter.mm,
+             Diameter.inch,
+             Diameter.m,
             ],
             inputTextFieldValue: ""),
         PickerModel(
-            parameterName: "Длина, L",
-            currentButtonName: Length.mm,
-            mode: .length,
+            parameterName: "Меньший диаметер, D2",
+            currentButtonName: Diameter.mm,
+            mode: .diameter,
             dataSourceArray: [
-             Length.mm,
-             Length.cm,
-             Length.m,
+             Diameter.mm,
+             Diameter.inch,
+             Diameter.m,
+            ],
+           inputTextFieldValue: ""),
+        PickerModel(
+            parameterName: "Давление, P",
+            currentButtonName: StressAndPressure.MPa,
+            mode: .stressAndPressure,
+            dataSourceArray: [
+             StressAndPressure.MPa,
+             StressAndPressure.Pa,
+             StressAndPressure.psi,
+             StressAndPressure.bar
+            ],
+           inputTextFieldValue: ""
+        ),
+        PickerModel(
+            parameterName: "Диаметр срезного элемента, d",
+            currentButtonName: Diameter.mm,
+            mode: .diameter,
+            dataSourceArray: [
+             Diameter.mm,
+             Diameter.inch,
+             Diameter.m,
+            ],
+           inputTextFieldValue: ""),
+        PickerModel(
+            parameterName: "Доп. напряжение на срез, [σ]τ",
+            currentButtonName: StressAndPressure.MPa,
+            mode: .stressAndPressure,
+            dataSourceArray: [
+             StressAndPressure.MPa,
+             StressAndPressure.Pa,
+             StressAndPressure.psi,
+             StressAndPressure.bar
             ],
            inputTextFieldValue: "")
     ]
     
     lazy var currentModel = models[0]
+    
+    var calculateResults: [String] = []
+
         
         // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // TODO: - Make Factory
+        self.navigationItem.title = "Количество болтов"
+        let doneItem = UIBarButtonItem(title: "История", style: .plain, target: self, action:  #selector(showHistory(_:)))
+        self.navigationItem.setRightBarButton(doneItem, animated: true)
+
         configure()
         picker.delegate = self
         picker.dataSource = self
         inputTableView.delegate = self
         inputTableView.dataSource = self
-        
-
     }
     
     // MARK: - Public methods
@@ -77,6 +117,7 @@ final class ViewController: UIViewController {
     func configure() {
         configureCalculateButton(calculateButton)
         configureTable(inputTableView)
+        configurePicker(picker)
     }
 
     private func configureCalculateButton(_ button: UIButton) {
@@ -88,11 +129,11 @@ final class ViewController: UIViewController {
     }
     
     private func configurePicker(_ picker: UIPickerView) {
-        picker.frame = CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)
+        picker.frame = CGRect(x: 0, y: 450, width: view.bounds.width, height: 100)
     }
 
     private func configureTable(_ table: UITableView) {
-        table.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 500)
+        table.frame = CGRect(x: 0, y: 44, width: view.bounds.width, height: 400)
         table.register(Cell.self, forCellReuseIdentifier: "cell")
         view.addSubview(table)
     }
@@ -103,13 +144,42 @@ final class ViewController: UIViewController {
     	
     @objc
     private func calculateButtonAction(_: UIButton) {
+        print(models)
         let firstValue: String = models[0].inputTextFieldValue
         let secondValue: String  = models[1].inputTextFieldValue
-        guard let numberFirstValueTextField = Float(firstValue) else { return }
-        guard let numberSecondValueTextField = Float(secondValue) else { return }
-        let sumValues = String(numberFirstValueTextField+numberSecondValueTextField)
-        callSumResultAlert(sumValues)
+        let thirdValue: String  = models[2].inputTextFieldValue
+        let fourthValue: String  = models[3].inputTextFieldValue
+        let fifthValue: String  = models[4].inputTextFieldValue
+        
+        guard let D1 = Float(firstValue),
+        let D2 = Float(secondValue),
+        let P = Float(thirdValue),
+        let d = Float(fourthValue),
+        let στ = Float(fifthValue) else {
+            let alert = UIAlertController(title: "Ti pidor", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "DA", style: .default, handler: { (_) in
+                
+            }))
+            present(alert, animated: true)
+            return }
+        
+        let calcCore = BoltsContCalcCore(D1: D1, D2: D2, P: P, d: d, στ: στ)
+        
+        let result = calcCore.getFormattedResult()
+
+        calculateResults.append(result)
+        
+        callSumResultAlert(result)
     }
+
+    @objc
+    private func showHistory(_: UIButton) {
+        let vc = HistoryTableViewController()
+        vc.models = calculateResults
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
 }
     
 extension ViewController: UIPickerViewDataSource {
@@ -134,13 +204,9 @@ extension ViewController: UIPickerViewDelegate {
     }
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-
-        
-        if currentModel.mode == models[0].mode {
-            models[0].currentButtonName = currentModel.dataSourceArray[row]
-        } else if currentModel.mode == models[1].mode {
-            models[1].currentButtonName = currentModel.dataSourceArray[row]
-        }
+        guard let index = models.firstIndex(of: currentModel) else { return }
+        models[index].currentButtonName = currentModel.dataSourceArray[row]
+        os_log("kadyrov")
         inputTableView.reloadData()
         picker.isHidden = true
     }
@@ -167,7 +233,7 @@ extension ViewController: UITableViewDataSource {
         let model = models[indexPath.row]
         cell.setNameParameterLabel(model.parameterName)
         cell.setNameDimensionButton(model.currentButtonName.description)
-        cell.mode = model.mode
+        cell.model = model
         return cell
     }
     
@@ -181,25 +247,18 @@ extension ViewController: ICellDelegate {
     // MARK: - ISetPicker implementation
     
     func didSelectCell(_ cell: Cell) {
-        guard
-        let newCurrentMode = cell.mode,
-        let newCurrentModel = models.first(where: { $0.mode == newCurrentMode }) else { return }
-        currentModel = newCurrentModel
-        
+        guard let model = cell.model else { return }
+        currentModel = model
         picker.reloadAllComponents()
         picker.isHidden = false
         view.addSubview(picker)
     }
     
     func didInputTextField(_ cell: Cell) {
-        switch cell.mode {
-        case .mass:
-            models[0].inputTextFieldValue = cell.inputTextFieldValue
-        case .length:
-            models[1].inputTextFieldValue = cell.inputTextFieldValue
-        default:
-            return
-        }
+        guard let model = cell.model else { return }
+        currentModel = model
+        guard let index = models.firstIndex(of: currentModel) else { return }
+        models[index].inputTextFieldValue = cell.inputTextFieldValue
     }
 }
 
