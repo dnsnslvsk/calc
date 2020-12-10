@@ -16,7 +16,7 @@ class BoltsContCalcCore {
         case P
         case d
         case στ
-    }
+    }
     
     let D1: Float
     let D2: Float

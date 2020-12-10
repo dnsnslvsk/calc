@@ -14,61 +14,63 @@ final class ViewController: UIViewController {
     
     // MARK: - Internal methods
     
-    lazy var models = [
-        PickerModel(
-            parameterName: "Больший диаметр, D1",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-            inputTextFieldValue: ""),
-        PickerModel(
-            parameterName: "Меньший диаметер, D2",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-           inputTextFieldValue: ""),
-        PickerModel(
-            parameterName: "Давление, P",
-            currentButtonName: StressAndPressure.MPa,
-            mode: .stressAndPressure,
-            dataSourceArray: [
-             StressAndPressure.MPa,
-             StressAndPressure.Pa,
-             StressAndPressure.psi,
-             StressAndPressure.bar
-            ],
-           inputTextFieldValue: ""
-        ),
-        PickerModel(
-            parameterName: "Диаметр срезного элемента, d",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-           inputTextFieldValue: ""),
-        PickerModel(
-            parameterName: "Доп. напряжение на срез, [σ]τ",
-            currentButtonName: StressAndPressure.MPa,
-            mode: .stressAndPressure,
-            dataSourceArray: [
-             StressAndPressure.MPa,
-             StressAndPressure.Pa,
-             StressAndPressure.psi,
-             StressAndPressure.bar
-            ],
-           inputTextFieldValue: "")
-    ]
+    var models: [PickerModel] = []
+    
+//    lazy var models = [
+//        PickerModel(
+//            parameterName: "Больший диаметр, D1",
+//            currentButtonName: Diameter.mm,
+//            mode: .diameter,
+//            dataSourceArray: [
+//             Diameter.mm,
+//             Diameter.inch,
+//             Diameter.m,
+//            ],
+//            inputTextFieldValue: ""),
+//        PickerModel(
+//            parameterName: "Меньший диаметер, D2",
+//            currentButtonName: Diameter.mm,
+//            mode: .diameter,
+//            dataSourceArray: [
+//             Diameter.mm,
+//             Diameter.inch,
+//             Diameter.m,
+//            ],
+//           inputTextFieldValue: ""),
+//        PickerModel(
+//            parameterName: "Давление, P",
+//            currentButtonName: StressAndPressure.MPa,
+//            mode: .stressAndPressure,
+//            dataSourceArray: [
+//             StressAndPressure.MPa,
+//             StressAndPressure.Pa,
+//             StressAndPressure.psi,
+//             StressAndPressure.bar
+//            ],
+//           inputTextFieldValue: ""
+//        ),
+//        PickerModel(
+//            parameterName: "Диаметр срезного элемента, d",
+//            currentButtonName: Diameter.mm,
+//            mode: .diameter,
+//            dataSourceArray: [
+//             Diameter.mm,
+//             Diameter.inch,
+//             Diameter.m,
+//            ],
+//           inputTextFieldValue: ""),
+//        PickerModel(
+//            parameterName: "Доп. напряжение на срез, [σ]τ",
+//            currentButtonName: StressAndPressure.MPa,
+//            mode: .stressAndPressure,
+//            dataSourceArray: [
+//             StressAndPressure.MPa,
+//             StressAndPressure.Pa,
+//             StressAndPressure.psi,
+//             StressAndPressure.bar
+//            ],
+//           inputTextFieldValue: "")
+//    ]
     
     lazy var currentModel = models[0]
     
@@ -90,6 +92,10 @@ final class ViewController: UIViewController {
         picker.dataSource = self
         inputTableView.delegate = self
         inputTableView.dataSource = self
+        
+        BoltsContCalcCore.Parameters.allCases.forEach { (parameter) in
+            print("Ti pidor")
+        }
     }
     
     // MARK: - Public methods
