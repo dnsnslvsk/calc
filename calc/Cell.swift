@@ -11,18 +11,18 @@ import UIKit
 final class Cell: UITableViewCell {
     
     var mode: Mode?
-    var delegate: ISetPicker?
+    var delegate: ICellDelegate?
     var inputTextFieldValue = ""
     
     @objc
-    private func dimensionButtonAction(_ : UIButton) {
+    private func dimensionButtonAction(_: UIButton) {
         delegate?.didSelectCell(self)
     }
     
     @objc
-    private func inputTextFieldAction(_ : UIButton) {
-        delegate?.didInputTextField(self)
+    private func inputTextFieldAction(_: UIButton) {
         guard let value = inputTextField.text else { return }
+        delegate?.didInputTextField(self)
         inputTextFieldValue = value
     }
     
@@ -41,7 +41,7 @@ final class Cell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        parameterLabel.frame = CGRect(x: 0, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        parameterLabel.frame = CGRect(x: 10, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
         parameterLabel.textAlignment = .left
         addSubview(parameterLabel)
 
@@ -61,7 +61,7 @@ final class Cell: UITableViewCell {
     }
 }
 
-protocol ISetPicker {
+protocol ICellDelegate {
     func didSelectCell(_ cell: Cell)
     func didInputTextField(_ cell: Cell)
 }

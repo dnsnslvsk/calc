@@ -8,19 +8,37 @@
 
 import Foundation
 
-
 struct PickerModel {
-    var mode: Mode
-    var dataSourceArray: [String]
-    var currentButtonName: String
+    
     var parameterName: String
+    var currentButtonName: CustomStringConvertible
+    var mode: Mode
+    var dataSourceArray: [CustomStringConvertible]
     var inputTextFieldValue: String
 }
 
-    
-    //MARK: - Lenght dimensions
+    //MARK: - Dimensions
     
 enum Mode {
     case mass
     case length
+}
+
+    //MARK: - Mass dimensions
+    
+enum Mass: String, CustomStringConvertible {
+    case kg = "кг"
+    case t = "т"
+    case g = "г"
+    case N = "Н"
+var description: String { rawValue }
+}
+    
+    //MARK: - Lenght dimensions
+    
+enum Length: String, CustomStringConvertible {
+    case mm = "мм"
+    case cm = "см"
+    case m = "м"
+var description: String { rawValue }
 }

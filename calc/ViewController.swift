@@ -14,20 +14,26 @@ final class ViewController: UIViewController {
     // MARK: - Internal methods
     
     lazy var models = [
-        PickerModel(mode: .mass, dataSourceArray: [
-            Mass.kg.rawValue,
-            Mass.t.rawValue,
-            Mass.g.rawValue,
-            Mass.N.rawValue
-        ], currentButtonName: Mass.kg.rawValue,
-           parameterName: "Сила, F",
-           inputTextFieldValue: ""),
-        PickerModel(mode: .length, dataSourceArray: [
-            Length.mm.rawValue,
-            Length.cm.rawValue,
-            Length.m.rawValue,
-        ], currentButtonName: Length.mm.rawValue,
-           parameterName: "Длина, L",
+        PickerModel(
+            parameterName: "Сила, F",
+            currentButtonName: Mass.kg,
+            mode: .mass,
+            dataSourceArray: [
+             Mass.kg,
+             Mass.t,
+             Mass.g,
+             Mass.N
+            ],
+            inputTextFieldValue: ""),
+        PickerModel(
+            parameterName: "Длина, L",
+            currentButtonName: Length.mm,
+            mode: .length,
+            dataSourceArray: [
+             Length.mm,
+             Length.cm,
+             Length.m,
+            ],
            inputTextFieldValue: "")
     ]
     
@@ -40,15 +46,17 @@ final class ViewController: UIViewController {
         configure()
         picker.delegate = self
         picker.dataSource = self
-        calculatorTable.delegate = self
-        calculatorTable.dataSource = self
+        inputTableView.delegate = self
+        inputTableView.dataSource = self
+        
+
     }
     
     // MARK: - Public methods
     
     let calculateButton = ButtonFactory.makeButton()
     let picker = PickerFactory.makePicker()
-    let calculatorTable = TableFactory.makeTable()
+    let inputTableView = TableFactory.makeTable()
     
     private func callSumResultAlert(_ sum: String) {
         let alert = UIAlertController(title: "The sum is", message: sum, preferredStyle: .alert)
@@ -68,7 +76,7 @@ final class ViewController: UIViewController {
     
     func configure() {
         configureCalculateButton(calculateButton)
-        configureTable(calculatorTable)
+        configureTable(inputTableView)
     }
 
     private func configureCalculateButton(_ button: UIButton) {
@@ -82,11 +90,10 @@ final class ViewController: UIViewController {
     private func configurePicker(_ picker: UIPickerView) {
         picker.frame = CGRect(x: 0, y: 550, width: view.bounds.width, height: 100)
     }
-    
-    
+
     private func configureTable(_ table: UITableView) {
         table.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 500)
-        calculatorTable.register(Cell.self, forCellReuseIdentifier: "cell")
+        table.register(Cell.self, forCellReuseIdentifier: "cell")
         view.addSubview(table)
     }
     
@@ -95,7 +102,7 @@ final class ViewController: UIViewController {
     // MARK: - Actions
     	
     @objc
-    private func calculateButtonAction(_ : UIButton) {
+    private func calculateButtonAction(_: UIButton) {
         let firstValue: String = models[0].inputTextFieldValue
         let secondValue: String  = models[1].inputTextFieldValue
         guard let numberFirstValueTextField = Float(firstValue) else { return }
@@ -123,7 +130,7 @@ extension ViewController: UIPickerViewDelegate {
     // MARK: - UIPickerViewDataSource implementation
     
     func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return currentModel.dataSourceArray[row]
+        return currentModel.dataSourceArray[row].description
     }
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -134,7 +141,7 @@ extension ViewController: UIPickerViewDelegate {
         } else if currentModel.mode == models[1].mode {
             models[1].currentButtonName = currentModel.dataSourceArray[row]
         }
-        calculatorTable.reloadData()
+        inputTableView.reloadData()
         picker.isHidden = true
     }
     
@@ -146,7 +153,7 @@ extension ViewController: UITableViewDelegate {
     
 }
 
-extension ViewController: UITableViewDataSource{
+extension ViewController: UITableViewDataSource {
     
     // MARK: - UITableViewDataSource implementation
     
@@ -159,7 +166,7 @@ extension ViewController: UITableViewDataSource{
         cell.delegate = self
         let model = models[indexPath.row]
         cell.setNameParameterLabel(model.parameterName)
-        cell.setNameDimensionButton(model.currentButtonName)
+        cell.setNameDimensionButton(model.currentButtonName.description)
         cell.mode = model.mode
         return cell
     }
@@ -169,7 +176,7 @@ extension ViewController: UITableViewDataSource{
      }
 }
 
-extension ViewController: ISetPicker{
+extension ViewController: ICellDelegate {
     
     // MARK: - ISetPicker implementation
     
@@ -178,6 +185,7 @@ extension ViewController: ISetPicker{
         let newCurrentMode = cell.mode,
         let newCurrentModel = models.first(where: { $0.mode == newCurrentMode }) else { return }
         currentModel = newCurrentModel
+        
         picker.reloadAllComponents()
         picker.isHidden = false
         view.addSubview(picker)
@@ -193,31 +201,10 @@ extension ViewController: ISetPicker{
             return
         }
     }
-    
 }
 
-extension ViewController {
-    
-    //MARK: - Mass dimensions
-    
-    enum Mass: String {
-        case kg = "kg"
-        case t = "t"
-        case g = "g"
-        case N = "N"
-    }
-}
 
-extension ViewController {
-    
-    //MARK: - Lenght dimensions
-    
-    enum Length: String {
-        case mm = "mm"
-        case cm = "cm"
-        case m = "m"
-    }
-}
+
 
 
 
