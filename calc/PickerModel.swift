@@ -17,7 +17,7 @@ struct PickerModel: Equatable {
     var currentButtonName: CustomStringConvertible
     var mode: Mode
     var dataSourceArray: [CustomStringConvertible]
-    var inputTextFieldValue: String
+    var textFieldValue: String
 }
 
 //MARK: - Dimensions

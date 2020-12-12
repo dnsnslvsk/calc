@@ -10,7 +10,9 @@ import UIKit
 
 class HistoryTableViewController: UITableViewController {
     
-    var models: [String] = []
+    var delegate: IHistoryCellDelegate?
+    var models: [HistoryModel] = []
+    var model = HistoryModel(formattedResult: "", inputValues: [], outputValues: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +21,16 @@ class HistoryTableViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //print(models[indexPath.row])
+        model = models[indexPath.row]
+        navigationController?.popViewController(animated: true)
+        delegate?.didSelectCell(model)
+
+    }
+    
+    
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -29,8 +41,14 @@ class HistoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = models[indexPath.row]
+        cell.textLabel?.text = models[indexPath.row].formattedResult
         cell.textLabel?.numberOfLines = 0
         return cell
     }
 }
+
+protocol IHistoryCellDelegate {
+    func didSelectCell(_ historyCell: HistoryModel)
+}
+
+

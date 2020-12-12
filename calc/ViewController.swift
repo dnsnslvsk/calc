@@ -14,102 +14,48 @@ final class ViewController: UIViewController {
     
     // MARK: - Internal methods
     
-    var models: [PickerModel] = []
+    var inputModels: [PickerModel] = []
+    var outputModels: [PickerModel] = []
     
-//    lazy var models = [
-//        PickerModel(
-//            parameterName: "Больший диаметр, D1",
-//            currentButtonName: Diameter.mm,
-//            mode: .diameter,
-//            dataSourceArray: [
-//             Diameter.mm,
-//             Diameter.inch,
-//             Diameter.m,
-//            ],
-//            inputTextFieldValue: ""),
-//        PickerModel(
-//            parameterName: "Меньший диаметер, D2",
-//            currentButtonName: Diameter.mm,
-//            mode: .diameter,
-//            dataSourceArray: [
-//             Diameter.mm,
-//             Diameter.inch,
-//             Diameter.m,
-//            ],
-//           inputTextFieldValue: ""),
-//        PickerModel(
-//            parameterName: "Давление, P",
-//            currentButtonName: StressAndPressure.MPa,
-//            mode: .stressAndPressure,
-//            dataSourceArray: [
-//             StressAndPressure.MPa,
-//             StressAndPressure.Pa,
-//             StressAndPressure.psi,
-//             StressAndPressure.bar
-//            ],
-//           inputTextFieldValue: ""
-//        ),
-//        PickerModel(
-//            parameterName: "Диаметр срезного элемента, d",
-//            currentButtonName: Diameter.mm,
-//            mode: .diameter,
-//            dataSourceArray: [
-//             Diameter.mm,
-//             Diameter.inch,
-//             Diameter.m,
-//            ],
-//           inputTextFieldValue: ""),
-//        PickerModel(
-//            parameterName: "Доп. напряжение на срез, [σ]τ",
-//            currentButtonName: StressAndPressure.MPa,
-//            mode: .stressAndPressure,
-//            dataSourceArray: [
-//             StressAndPressure.MPa,
-//             StressAndPressure.Pa,
-//             StressAndPressure.psi,
-//             StressAndPressure.bar
-//            ],
-//           inputTextFieldValue: "")
-//    ]
+    lazy var currentModel = inputModels[0]
     
-    lazy var currentModel = models[0]
+    var calculateResults: [HistoryModel] = []
     
-    var calculateResults: [String] = []
-
-        
+    var currentHistoryModel = HistoryModel(formattedResult: "", inputValues: [], outputValues: [])
+    
+    
         // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let boltsCountDataSource = BoltsCountDataSource()
+        inputModels = boltsCountDataSource.inputModels
+        outputModels = boltsCountDataSource.outputModels
+        
         // TODO: - Make Factory
         self.navigationItem.title = "Количество болтов"
         let doneItem = UIBarButtonItem(title: "История", style: .plain, target: self, action:  #selector(showHistory(_:)))
+        let menuItem = UIBarButtonItem(title: "Расчеты", style: .plain, target: self, action: .none)
         self.navigationItem.setRightBarButton(doneItem, animated: true)
-
+        self.navigationItem.setLeftBarButton(menuItem, animated: true)
+        
         configure()
         picker.delegate = self
         picker.dataSource = self
-        inputTableView.delegate = self
-        inputTableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
         
-        BoltsContCalcCore.Parameters.allCases.forEach { (parameter) in
-            print("Ti pidor")
-        }
     }
     
     // MARK: - Public methods
     
-    let calculateButton = ButtonFactory.makeButton()
     let picker = PickerFactory.makePicker()
-    let inputTableView = TableFactory.makeTable()
+    let tableView = TableFactory.makeTable()
     
-    private func callSumResultAlert(_ sum: String) {
-        let alert = UIAlertController(title: "The sum is", message: sum, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Good", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Not good", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
+    lazy var customView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
+
+    
     
     
     // MARK: - Internal methods
@@ -121,25 +67,22 @@ final class ViewController: UIViewController {
     // MARK: - Configure
     
     func configure() {
-        configureCalculateButton(calculateButton)
-        configureTable(inputTableView)
+        configureCustomView(customView)
+        configureTable(tableView)
         configurePicker(picker)
     }
-
-    private func configureCalculateButton(_ button: UIButton) {
-        button.frame = CGRect(x: 150, y: 600, width: 100, height: 40)
-        let name = "Calculate"
-        button.setTitle(name, for: .normal)
-        calculateButton.addTarget(self, action: #selector(calculateButtonAction(_ :)), for: .touchUpInside)
-        view.addSubview(button)
+    
+    private func configureCustomView(_ view: UIView) {
+        customView.backgroundColor = .black
+        customView.alpha = 0.9
     }
     
     private func configurePicker(_ picker: UIPickerView) {
-        picker.frame = CGRect(x: 0, y: 450, width: view.bounds.width, height: 100)
+        picker.frame = CGRect(x: 0, y: view.bounds.height/4, width: view.bounds.width, height: 150)
     }
 
     private func configureTable(_ table: UITableView) {
-        table.frame = CGRect(x: 0, y: 44, width: view.bounds.width, height: 400)
+        table.frame = CGRect(x: 0, y: 44, width: view.bounds.width, height: 550)
         table.register(Cell.self, forCellReuseIdentifier: "cell")
         view.addSubview(table)
     }
@@ -148,42 +91,38 @@ final class ViewController: UIViewController {
     
     // MARK: - Actions
     	
-    @objc
-    private func calculateButtonAction(_: UIButton) {
-        print(models)
-        let firstValue: String = models[0].inputTextFieldValue
-        let secondValue: String  = models[1].inputTextFieldValue
-        let thirdValue: String  = models[2].inputTextFieldValue
-        let fourthValue: String  = models[3].inputTextFieldValue
-        let fifthValue: String  = models[4].inputTextFieldValue
+//    @objc
+//    private func calculateButtonAction(_: UIButton) {
+    private func calculateButtonAction() {
+        let firstValue: String = inputModels[0].textFieldValue
+        let secondValue: String  = inputModels[1].textFieldValue
+        let thirdValue: String  = inputModels[2].textFieldValue
+        let fourthValue: String  = inputModels[3].textFieldValue
+        let fifthValue: String  = inputModels[4].textFieldValue
         
-        guard let D1 = Float(firstValue),
+        guard
+        let D1 = Float(firstValue),
         let D2 = Float(secondValue),
         let P = Float(thirdValue),
         let d = Float(fourthValue),
-        let στ = Float(fifthValue) else {
-            let alert = UIAlertController(title: "Ti pidor", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "DA", style: .default, handler: { (_) in
-                
-            }))
-            present(alert, animated: true)
-            return }
+        let στ = Float(fifthValue)
+        else { return }
         
-        let calcCore = BoltsContCalcCore(D1: D1, D2: D2, P: P, d: d, στ: στ)
-        
+        let calcCore = BoltsCountCalculationCore(D1: D1, D2: D2, P: P, d: d, στ: στ)
         let result = calcCore.getFormattedResult()
-
-        calculateResults.append(result)
-        
-        callSumResultAlert(result)
+        for item in 0...outputModels.count-1 {
+            outputModels[item].textFieldValue = result[item]
+        }
+        tableView.reloadSections(IndexSet(integer: 1), with: .fade)
+        calculateResults.append(calcCore.getResultForHistory())
     }
-
+    
     @objc
     private func showHistory(_: UIButton) {
         let vc = HistoryTableViewController()
+        vc.delegate = self
         vc.models = calculateResults
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
 }
@@ -210,13 +149,13 @@ extension ViewController: UIPickerViewDelegate {
     }
     
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        guard let index = models.firstIndex(of: currentModel) else { return }
-        models[index].currentButtonName = currentModel.dataSourceArray[row]
+        guard let index = inputModels.firstIndex(of: currentModel) else { return }
+        inputModels[index].currentButtonName = currentModel.dataSourceArray[row]
         os_log("kadyrov")
-        inputTableView.reloadData()
+        tableView.reloadData()
         picker.isHidden = true
+        customView.isHidden = true
     }
-    
 }
 
 extension ViewController: UITableViewDelegate {
@@ -229,47 +168,97 @@ extension ViewController: UITableViewDataSource {
     
     // MARK: - UITableViewDataSource implementation
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return models.count
+
+        switch section {
+        case 0:
+            return inputModels.count
+        case 1:
+            return outputModels.count
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! Cell
         cell.delegate = self
-        let model = models[indexPath.row]
-        cell.setNameParameterLabel(model.parameterName)
-        cell.setNameDimensionButton(model.currentButtonName.description)
-        cell.model = model
-        return cell
+        switch indexPath.section {
+        case 0:
+            let model = inputModels[indexPath.row]
+            cell.setNameParameterLabel(model.parameterName)
+            cell.setNameDimensionButton(model.currentButtonName.description)
+            cell.setValueInputTextFiled(model.textFieldValue)
+            cell.model = model
+            return cell
+        case 1:
+            let model = outputModels[indexPath.row]
+            cell.setNameParameterLabel(model.parameterName)
+            cell.setNameDimensionButton(model.currentButtonName.description)
+            cell.setValueInputTextFiled(model.textFieldValue)
+            cell.model = model
+            return cell
+        default:
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> Int {
         return Constant.tableViewEstimatedRowHeight
-     }
+    }
 }
 
 extension ViewController: ICellDelegate {
     
-    // MARK: - ISetPicker implementation
+    // MARK: - ICellDelegate implementation
     
     func didSelectCell(_ cell: Cell) {
         guard let model = cell.model else { return }
         currentModel = model
         picker.reloadAllComponents()
         picker.isHidden = false
+        self.view.addSubview(customView)
+        customView.isHidden = false
         view.addSubview(picker)
     }
     
     func didInputTextField(_ cell: Cell) {
         guard let model = cell.model else { return }
         currentModel = model
-        guard let index = models.firstIndex(of: currentModel) else { return }
-        models[index].inputTextFieldValue = cell.inputTextFieldValue
+        guard let index = inputModels.firstIndex(of: currentModel) else { return }
+        inputModels[index].textFieldValue = cell.inputTextFieldValue
+        calculateButtonAction()
     }
 }
 
 
 
+
+extension ViewController: IHistoryCellDelegate {
+    
+    
+    // MARK: - IHistoryCellDelegate implementation
+    
+    func didSelectCell(_ historyCell: HistoryModel) {
+        
+        print(historyCell.inputValues)
+        print(historyCell.outputValues)
+        
+        for item in 0...historyCell.inputValues.count-1 {
+            inputModels[item].textFieldValue = historyCell.inputValues[item]
+        }
+        
+        for item in 0...historyCell.outputValues.count-1 {
+            outputModels[item].textFieldValue = historyCell.outputValues[item]
+        }
+        tableView.reloadData()
+    }
+
+}
 
 
 

@@ -20,10 +20,13 @@ final class Cell: UITableViewCell {
     }
     
     @objc
-    private func inputTextFieldAction(_: UIButton) {
+    private func inputTextFieldAction(_: UITextField) {
         guard let value = inputTextField.text else { return }
-        delegate?.didInputTextField(self)
         inputTextFieldValue = value
+        func caretRect(for position: UITextPosition) -> CGRect {
+            return CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+        }
+        delegate?.didInputTextField(self)
     }
     
     var parameterLabel = LabelFactory.makeLabel()
@@ -37,23 +40,34 @@ final class Cell: UITableViewCell {
     func setNameDimensionButton(_ name: String?) {
         dimensionButton.setTitle(name, for: .normal)
     }
-        
+    
+    func setValueInputTextFiled(_ value: String?) {
+            inputTextField.text = value
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessoryType = .none
+    }
+    
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         parameterLabel.frame = CGRect(x: 10, y: 0, width: 205, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
         parameterLabel.textAlignment = .left
         addSubview(parameterLabel)
-
         
-        dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height:ViewController.Constant.tableViewEstimatedRowHeight-6)
+        dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
         dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
         addSubview(dimensionButton)
         
         inputTextField.frame = CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
-        inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .allEditingEvents)
+        inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
         inputTextField.placeholder = "0"
         addSubview(inputTextField)
+
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
