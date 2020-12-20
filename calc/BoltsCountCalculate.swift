@@ -9,197 +9,197 @@
 import Foundation
 
 final class BoltsCountDataSource {
-    
-    lazy var inputModels = [
-        PickerModel(
-            parameterName: "Больший диаметр, D1",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-            textFieldValue: ""),
-        PickerModel(
-            parameterName: "Меньший диаметер, D2",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-           textFieldValue: ""),
-        PickerModel(
-            parameterName: "Давление, P",
-            currentButtonName: StressAndPressure.MPa,
-            mode: .stressAndPressure,
-            dataSourceArray: [
-             StressAndPressure.MPa,
-             StressAndPressure.Pa,
-             StressAndPressure.psi,
-             StressAndPressure.bar
-            ],
-           textFieldValue: ""),
-        PickerModel(
-            parameterName: "Диаметр срезного элемента, d",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-             Diameter.mm,
-             Diameter.inch,
-             Diameter.m,
-            ],
-           textFieldValue: ""),
-        PickerModel(
-            parameterName: "Доп. напряжение на срез, [σ]τ",
-            currentButtonName: StressAndPressure.MPa,
-            mode: .stressAndPressure,
-            dataSourceArray: [
-             StressAndPressure.MPa,
-             StressAndPressure.Pa,
-             StressAndPressure.psi,
-             StressAndPressure.bar
-            ],
-           textFieldValue: "")
-    ]
-
-    lazy var outputModels = [
-        PickerModel(
-            parameterName: "Площадь под давлением, S1",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-                Diameter.mm,
-                Diameter.inch,
-                Diameter.m,
-            ],
-            textFieldValue: ""),
-        PickerModel(
-            parameterName: "Сечение крепежа, S2",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-                Diameter.mm,
-                Diameter.inch,
-                Diameter.m,
-            ],
-            textFieldValue: ""),
-        PickerModel(
-            parameterName: "Сила от давления, F1",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-                Diameter.mm,
-                Diameter.inch,
-                Diameter.m,
-            ],
-            textFieldValue: ""),
-        PickerModel(
-            parameterName: "Сила среза крепежа, F2",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-                Diameter.mm,
-                Diameter.inch,
-                Diameter.m,
-            ],
-            textFieldValue: ""),
-        PickerModel(
-            parameterName: "Количество болтов, n",
-            currentButtonName: Diameter.mm,
-            mode: .diameter,
-            dataSourceArray: [
-                Diameter.mm,
-                Diameter.inch,
-                Diameter.m,
-            ],
-            textFieldValue: "")
-    ]
+	
+	lazy var inputModels = [
+		CellModel(
+			parameterName: "Больший диаметр, D1",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Меньший диаметер, D2",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Давление, P",
+			currentButtonName: StressAndPressure.MPa,
+			mode: .stressAndPressure,
+			dataSourceArray: [
+				StressAndPressure.MPa,
+				StressAndPressure.Pa,
+				StressAndPressure.psi,
+				StressAndPressure.bar
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Диаметр срезного элемента, d",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Доп. напряжение на срез, [σ]τ",
+			currentButtonName: StressAndPressure.MPa,
+			mode: .stressAndPressure,
+			dataSourceArray: [
+				StressAndPressure.MPa,
+				StressAndPressure.Pa,
+				StressAndPressure.psi,
+				StressAndPressure.bar
+			],
+			textFieldValue: "")
+	]
+	
+	lazy var outputModels = [
+		CellModel(
+			parameterName: "Площадь под давлением, S1",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Сечение крепежа, S2",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Сила от давления, F1",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Сила среза крепежа, F2",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: ""),
+		CellModel(
+			parameterName: "Количество болтов, n",
+			currentButtonName: Diameter.mm,
+			mode: .diameter,
+			dataSourceArray: [
+				Diameter.mm,
+				Diameter.inch,
+				Diameter.m,
+			],
+			textFieldValue: "")
+	]
 }
 
 final class BoltsCountCalculationCore {
-    
-    let D1: Float
-    let D2: Float
-    let P: Float
-    let d: Float
-    let στ: Float
-    
-    var result: [String] = []
-    
-    internal init(D1: Float, D2: Float, P: Float, d: Float, στ: Float) {
-        self.D1 = D1
-        self.D2 = D2
-        self.P = P
-        self.d = d
-        self.στ = στ
-    }
-    
-    var S1: Float = 0
-    var S2: Float = 0
-    var F1: Float = 0
-    var F2: Float = 0
-    var n: Float = 0
-    var resultForHistory: [String] = []
-    
-    func calculate() -> [Float] {
-        S1 = round(Float.pi * ((D1*D1)/4 - (D2*D2)/4))
-        S2 = round(Float.pi * d * d / 4)
-        F1 = round(S1 * P)
-        F2 = round(στ * S2)
-        n = round(F1/F2)
-        return [S1, S2, F1, F2, n]
-    }
-    
-    func getFormattedResult() -> [String] {
-        for item in calculate() {
-            result.append("\(item)")
-        }
-        return result
-    }
-    
-    
-    func getResultForHistory() -> HistoryModel {
-        resultForHistory = getFormattedResult()
-        let historyModel = HistoryModel(
-        formattedResult:
-        """
-        ИСХОДНЫЕ ДАННЫЕ:
-        Больший диаметр, D1 = \(D1) мм
-        Меньший диаметр, D2 =  \(D2) мм
-        Давление, P =  \(P) МПа
-        Диаметр срезного элемента, d =  \(d) мм
-        Доп. напряжение на срез, [σ]τ =  \(στ) МПа
-        
-        РЕЗУЛЬТАТ:
-        Площадь под давлением, S1 =  \(resultForHistory[0]) мм^2
-        Сечение крепежа, S2 =  \(resultForHistory[1]) мм^2
-        Сила от давления, F1 =  \(resultForHistory[2]) Н
-        Сила среза крепежа, F2 =  \(resultForHistory[3]) Н
-        Количество болтов, n =  \(resultForHistory[4]) шт.
-        """,
-        inputValues: ["\(D1)", "\(D2)", "\(P)", "\(d)", "\(στ)"],
-        outputValues: [resultForHistory[0],resultForHistory[1],resultForHistory[2],resultForHistory[3],resultForHistory[4]])
-        return historyModel
-    }
-    
+	
+	let D1: Float
+	let D2: Float
+	let P: Float
+	let d: Float
+	let στ: Float
+	
+	var result: [String] = []
+	
+	internal init(D1: Float, D2: Float, P: Float, d: Float, στ: Float) {
+		self.D1 = D1
+		self.D2 = D2
+		self.P = P
+		self.d = d
+		self.στ = στ
+	}
+	
+	var S1: Float = 0
+	var S2: Float = 0
+	var F1: Float = 0
+	var F2: Float = 0
+	var n: Float = 0
+	var resultForHistory: [String] = []
+	
+	func calculate() -> [Float] {
+		S1 = round(Float.pi * ((D1*D1)/4 - (D2*D2)/4))
+		S2 = round(Float.pi * d * d / 4)
+		F1 = round(S1 * P)
+		F2 = round(στ * S2)
+		n = round(F1/F2)
+		return [S1, S2, F1, F2, n]
+	}
+	
+	func getFormattedResult() -> [String] {
+		for item in calculate() {
+			result.append("\(item)")
+		}
+		return result
+	}
+	
+	
+	func getResultForHistory() -> HistoryCellModel {
+		resultForHistory = getFormattedResult()
+		let historyModel = HistoryCellModel(
+			formattedResult:
+			"""
+			ИСХОДНЫЕ ДАННЫЕ:
+			Больший диаметр, D1 = \(D1) мм
+			Меньший диаметр, D2 =  \(D2) мм
+			Давление, P =  \(P) МПа
+			Диаметр срезного элемента, d =  \(d) мм
+			Доп. напряжение на срез, [σ]τ =  \(στ) МПа
+			
+			РЕЗУЛЬТАТ:
+			Площадь под давлением, S1 =  \(resultForHistory[0]) мм²
+			Сечение крепежа, S2 =  \(resultForHistory[1]) мм²
+			Сила от давления, F1 =  \(resultForHistory[2]) Н
+			Сила среза крепежа, F2 =  \(resultForHistory[3]) Н
+			Количество болтов, n =  \(resultForHistory[4]) шт.
+			""",
+			inputValues: ["\(D1)", "\(D2)", "\(P)", "\(d)", "\(στ)"],
+			outputValues: [resultForHistory[0],resultForHistory[1],resultForHistory[2],resultForHistory[3],resultForHistory[4]])
+		return historyModel
+	}
+	
 }
 
 extension BoltsCountCalculationCore {
-    
-    enum Parameters: Float, CaseIterable {
-        case D1
-        case D2
-        case P
-        case d
-        case στ
-    }
+	
+	enum Parameters: Float, CaseIterable {
+		case D1
+		case D2
+		case P
+		case d
+		case στ
+	}
 }
 
-struct HistoryModel {
-    var formattedResult: String
-    var inputValues: [String]
-    var outputValues: [String]
+struct HistoryCellModel {
+	var formattedResult: String
+	var inputValues: [String]
+	var outputValues: [String]
 }

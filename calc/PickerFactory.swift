@@ -9,9 +9,9 @@
 import UIKit
 
 class PickerFactory {
-    
-    static func makePicker() -> UIPickerView {
-        let picker = UIPickerView()
-        return picker
-    }
+	
+	static func makePicker() -> UIPickerView {
+		let picker = UIPickerView()
+		return picker
+	}
 }

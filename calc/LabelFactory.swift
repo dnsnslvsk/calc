@@ -9,11 +9,11 @@
 import UIKit
 
 final class LabelFactory {
-    
-    static func makeLabel() -> UILabel {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 12)
-        return label
-    }
+	
+	static func makeLabel() -> UILabel {
+		let label = UILabel()
+		label.textAlignment = .center
+		label.font = .systemFont(ofSize: 12)
+		return label
+	}
 }
