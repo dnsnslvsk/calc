@@ -15,33 +15,6 @@ struct CellModel: Equatable {
 	let id = UUID()
 	var parameterName: String
 	var currentButtonName: CustomStringConvertible
-	var mode: Mode
 	var dataSourceArray: [CustomStringConvertible]
 	var textFieldValue: String
-}
-
-//MARK: - Dimensions
-
-enum Mode {
-	case stressAndPressure
-	case diameter
-}
-
-//MARK: - Mass dimensions
-
-enum StressAndPressure: String, CustomStringConvertible {
-	case MPa = "МПа"
-	case Pa = "Па"
-	case psi = "psi"
-	case bar = "атм"
-	var description: String { rawValue }
-}
-
-//MARK: - Lenght dimensions
-
-enum Diameter: String, CustomStringConvertible {
-	case mm = "мм"
-	case inch = "дюйм"
-	case m = "м"
-	var description: String { rawValue }
 }

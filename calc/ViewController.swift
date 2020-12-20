@@ -41,18 +41,13 @@ final class ViewController: UIViewController {
 		picker.dataSource = self
 		tableView.delegate = self
 		tableView.dataSource = self
-		
 	}
 	
 	// MARK: - Public methods
 	
 	let picker = PickerFactory.makePicker()
 	let tableView = TableFactory.makeTable()
-	
 	lazy var customView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-	
-	
-	
 	
 	// MARK: - Internal methods
 	
@@ -206,7 +201,7 @@ extension ViewController: ICellDelegate {
 	
 	// MARK: - ICellDelegate implementation
 	
-	func didSelectInputCell(_ cell: Cell) {
+	func didSelectCell(_ cell: Cell) {
 		guard let model = cell.model else { return }
 		currentModel = model
 		picker.reloadAllComponents()

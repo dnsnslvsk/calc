@@ -10,111 +10,61 @@ import Foundation
 
 final class BoltsCountDataSource {
 	
+	let dimensions = Dimensions()
+	
 	lazy var inputModels = [
 		CellModel(
 			parameterName: "Больший диаметр, D1",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.diameterArray[0],
+			dataSourceArray: dimensions.diameterArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Меньший диаметер, D2",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.diameterArray[0],
+			dataSourceArray: dimensions.diameterArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Давление, P",
-			currentButtonName: StressAndPressure.MPa,
-			mode: .stressAndPressure,
-			dataSourceArray: [
-				StressAndPressure.MPa,
-				StressAndPressure.Pa,
-				StressAndPressure.psi,
-				StressAndPressure.bar
-			],
+			currentButtonName: dimensions.stressAndPressureArray[0],
+			dataSourceArray: dimensions.stressAndPressureArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Диаметр срезного элемента, d",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.diameterArray[0],
+			dataSourceArray: dimensions.diameterArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Доп. напряжение на срез, [σ]τ",
-			currentButtonName: StressAndPressure.MPa,
-			mode: .stressAndPressure,
-			dataSourceArray: [
-				StressAndPressure.MPa,
-				StressAndPressure.Pa,
-				StressAndPressure.psi,
-				StressAndPressure.bar
-			],
+			currentButtonName: dimensions.stressAndPressureArray[0],
+			dataSourceArray: dimensions.stressAndPressureArray,
 			textFieldValue: "")
 	]
 	
 	lazy var outputModels = [
 		CellModel(
 			parameterName: "Площадь под давлением, S1",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.diameterArray[0],
+			dataSourceArray: dimensions.diameterArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Сечение крепежа, S2",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.diameterArray[0],
+			dataSourceArray: dimensions.diameterArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Сила от давления, F1",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.stressAndPressureArray[0],
+			dataSourceArray: dimensions.stressAndPressureArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Сила среза крепежа, F2",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.stressAndPressureArray[0],
+			dataSourceArray: dimensions.stressAndPressureArray,
 			textFieldValue: ""),
 		CellModel(
 			parameterName: "Количество болтов, n",
-			currentButtonName: Diameter.mm,
-			mode: .diameter,
-			dataSourceArray: [
-				Diameter.mm,
-				Diameter.inch,
-				Diameter.m,
-			],
+			currentButtonName: dimensions.stressAndPressureArray[0],
+			dataSourceArray: dimensions.stressAndPressureArray,
 			textFieldValue: "")
 	]
 }
@@ -198,8 +148,3 @@ extension BoltsCountCalculationCore {
 	}
 }
 
-struct HistoryCellModel {
-	var formattedResult: String
-	var inputValues: [String]
-	var outputValues: [String]
-}

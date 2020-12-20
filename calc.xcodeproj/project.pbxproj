@@ -11,6 +11,8 @@
 		2F2400312557209600609F4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F2400302557209600609F4D /* Assets.xcassets */; };
 		2F2400342557209600609F4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F2400322557209600609F4D /* LaunchScreen.storyboard */; };
 		2F315DA92576C0020095C8BE /* CellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F315DA82576C0020095C8BE /* CellModel.swift */; };
+		2F318581258F8BCF00363280 /* HistoryCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F318580258F8BCF00363280 /* HistoryCellModel.swift */; };
+		2F318583258FB03900363280 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F318582258FB03900363280 /* Dimensions.swift */; };
 		2F4DD81C258258A90071573A /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4DD81B258258A90071573A /* HistoryTableViewController.swift */; };
 		2F4DD81E258270EC0071573A /* BoltsCountCalculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4DD81D258270EC0071573A /* BoltsCountCalculate.swift */; };
 		2FB2D6952571730700032B34 /* TableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2D6942571730700032B34 /* TableFactory.swift */; };
@@ -32,6 +34,8 @@
 		2F2400332557209600609F4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2F2400352557209600609F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F315DA82576C0020095C8BE /* CellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellModel.swift; sourceTree = "<group>"; };
+		2F318580258F8BCF00363280 /* HistoryCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCellModel.swift; sourceTree = "<group>"; };
+		2F318582258FB03900363280 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
 		2F4DD81B258258A90071573A /* HistoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 		2F4DD81D258270EC0071573A /* BoltsCountCalculate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoltsCountCalculate.swift; sourceTree = "<group>"; };
 		2FB2D6942571730700032B34 /* TableFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableFactory.swift; sourceTree = "<group>"; };
@@ -80,10 +84,12 @@
 				36D2F040255C8CA100B49765 /* AppDelegate.swift */,
 				36D2F03D255C8CA100B49765 /* SceneDelegate.swift */,
 				36D2F043255C8CA200B49765 /* ViewController.swift */,
-				2F4DD81D258270EC0071573A /* BoltsCountCalculate.swift */,
-				2FB2D6962571753E00032B34 /* Cell.swift */,
 				2F4DD81B258258A90071573A /* HistoryTableViewController.swift */,
+				2FB2D6962571753E00032B34 /* Cell.swift */,
+				2F318582258FB03900363280 /* Dimensions.swift */,
+				2F4DD81D258270EC0071573A /* BoltsCountCalculate.swift */,
 				2F315DA82576C0020095C8BE /* CellModel.swift */,
+				2F318580258F8BCF00363280 /* HistoryCellModel.swift */,
 				2FB2D6942571730700032B34 /* TableFactory.swift */,
 				36D2F042255C8CA200B49765 /* LabelFactory.swift */,
 				36D2F03E255C8CA100B49765 /* ButtonFactory.swift */,
@@ -170,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F318581258F8BCF00363280 /* HistoryCellModel.swift in Sources */,
 				36D2F047255C8CA200B49765 /* AppDelegate.swift in Sources */,
 				36D2F049255C8CA200B49765 /* LabelFactory.swift in Sources */,
 				36D2F048255C8CA200B49765 /* TextFieldFactory.swift in Sources */,
@@ -181,6 +188,7 @@
 				2F4DD81C258258A90071573A /* HistoryTableViewController.swift in Sources */,
 				36D2F046255C8CA200B49765 /* PickerFactory.swift in Sources */,
 				2F4DD81E258270EC0071573A /* BoltsCountCalculate.swift in Sources */,
+				2F318583258FB03900363280 /* Dimensions.swift in Sources */,
 				36D2F044255C8CA200B49765 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

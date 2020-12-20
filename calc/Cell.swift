@@ -15,6 +15,9 @@ final class Cell: UITableViewCell {
 	var model: CellModel?
 	var delegate: ICellDelegate?
 	var inputTextFieldValue = ""
+	
+	// MARK: - Public methods
+
 	var parameterLabel = LabelFactory.makeLabel()
 	var dimensionButton = ButtonFactory.makeButton()
 	var inputTextField = TexfFieldFactory.makeTextField()
@@ -72,7 +75,7 @@ final class Cell: UITableViewCell {
 
 	@objc
 	private func dimensionButtonAction(_: UIButton) {
-		delegate?.didSelectInputCell(self)
+		delegate?.didSelectCell(self)
 	}
 	
 	@objc
@@ -86,7 +89,7 @@ final class Cell: UITableViewCell {
 // MARK: - ICellDelegate
 
 protocol ICellDelegate {
-	func didSelectInputCell(_ cell: Cell)
+	func didSelectCell(_ cell: Cell)
 	func didInputTextField(_ cell: Cell)
 }
 
