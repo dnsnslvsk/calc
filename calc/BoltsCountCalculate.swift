@@ -10,83 +10,85 @@ import Foundation
 
 final class BoltsCountDataSource {
 	
+	// MARK: - Internal properties
+
 	let dimensions = Dimensions()
-	
 	lazy var inputModels = [
 		CellModel(
 			parameterName: "Больший диаметр, D1",
 			currentButtonName: dimensions.diameterArray[0],
 			dataSourceArray: dimensions.diameterArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Меньший диаметер, D2",
 			currentButtonName: dimensions.diameterArray[0],
 			dataSourceArray: dimensions.diameterArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Давление, P",
 			currentButtonName: dimensions.stressAndPressureArray[0],
 			dataSourceArray: dimensions.stressAndPressureArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Диаметр срезного элемента, d",
 			currentButtonName: dimensions.diameterArray[0],
 			dataSourceArray: dimensions.diameterArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Доп. напряжение на срез, [σ]τ",
 			currentButtonName: dimensions.stressAndPressureArray[0],
 			dataSourceArray: dimensions.stressAndPressureArray,
-			textFieldValue: "")
+			textFieldValue: "",
+			sectionNumber: 0),
 	]
-	
 	lazy var outputModels = [
 		CellModel(
 			parameterName: "Площадь под давлением, S1",
 			currentButtonName: dimensions.diameterArray[0],
 			dataSourceArray: dimensions.diameterArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Сечение крепежа, S2",
 			currentButtonName: dimensions.diameterArray[0],
 			dataSourceArray: dimensions.diameterArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Сила от давления, F1",
 			currentButtonName: dimensions.stressAndPressureArray[0],
 			dataSourceArray: dimensions.stressAndPressureArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Сила среза крепежа, F2",
 			currentButtonName: dimensions.stressAndPressureArray[0],
 			dataSourceArray: dimensions.stressAndPressureArray,
-			textFieldValue: ""),
+			textFieldValue: "",
+			sectionNumber: 0),
 		CellModel(
 			parameterName: "Количество болтов, n",
 			currentButtonName: dimensions.stressAndPressureArray[0],
 			dataSourceArray: dimensions.stressAndPressureArray,
-			textFieldValue: "")
+			textFieldValue: "",
+			sectionNumber: 0),
 	]
 }
 
 final class BoltsCountCalculationCore {
 	
+	// MARK: - Internal properties
+
 	let D1: Float
 	let D2: Float
 	let P: Float
 	let d: Float
 	let στ: Float
-	
 	var result: [String] = []
-	
-	internal init(D1: Float, D2: Float, P: Float, d: Float, στ: Float) {
-		self.D1 = D1
-		self.D2 = D2
-		self.P = P
-		self.d = d
-		self.στ = στ
-	}
-	
 	var S1: Float = 0
 	var S2: Float = 0
 	var F1: Float = 0
@@ -94,6 +96,8 @@ final class BoltsCountCalculationCore {
 	var n: Float = 0
 	var resultForHistory: [String] = []
 	
+	// MARK: - Internal methods
+
 	func calculate() -> [Float] {
 		S1 = round(Float.pi * ((D1*D1)/4 - (D2*D2)/4))
 		S2 = round(Float.pi * d * d / 4)
@@ -109,7 +113,6 @@ final class BoltsCountCalculationCore {
 		}
 		return result
 	}
-	
 	
 	func getResultForHistory() -> HistoryCellModel {
 		resultForHistory = getFormattedResult()
@@ -135,6 +138,15 @@ final class BoltsCountCalculationCore {
 		return historyModel
 	}
 	
+	// MARK: - Initialization
+
+	internal init(D1: Float, D2: Float, P: Float, d: Float, στ: Float) {
+		self.D1 = D1
+		self.D2 = D2
+		self.P = P
+		self.d = d
+		self.στ = στ
+	}
 }
 
 extension BoltsCountCalculationCore {

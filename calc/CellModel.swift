@@ -17,4 +17,5 @@ struct CellModel: Equatable {
 	var currentButtonName: CustomStringConvertible
 	var dataSourceArray: [CustomStringConvertible]
 	var textFieldValue: String
+	var sectionNumber: Int
 }

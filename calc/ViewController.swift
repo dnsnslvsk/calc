@@ -135,8 +135,13 @@ extension ViewController: UIPickerViewDelegate {
 	}
 	
 	func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-		guard let index = inputModels.firstIndex(of: currentModel) else { return }
-		inputModels[index].currentButtonName = currentModel.dataSourceArray[row]
+		if currentModel.sectionNumber == 0 {
+			guard	let inputIndex = inputModels.firstIndex(of: currentModel) else { return }
+			inputModels[inputIndex].currentButtonName = currentModel.dataSourceArray[row]
+		} else if currentModel.sectionNumber == 1 {
+			guard	let outputIndex = outputModels.firstIndex(of: currentModel) else { return }
+			outputModels[outputIndex].currentButtonName = currentModel.dataSourceArray[row]
+		}
 		os_log("kadyrov")
 		tableView.reloadData()
 		picker.isHidden = true
@@ -174,17 +179,20 @@ extension ViewController: UITableViewDataSource {
 		cell.delegate = self
 		switch indexPath.section {
 		case 0:
-			let model = inputModels[indexPath.row]
+			var model = inputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
 			cell.setNameDimensionButton(model.currentButtonName.description)
 			cell.setValueInputTextFiled(model.textFieldValue)
+			model.sectionNumber = 0
 			cell.model = model
+			
 			return cell
 		case 1:
-			let model = outputModels[indexPath.row]
+			var model = outputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
 			cell.setNameDimensionButton(model.currentButtonName.description)
 			cell.setValueInputTextFiled(model.textFieldValue)
+			model.sectionNumber = 1
 			cell.model = model
 			return cell
 		default:
@@ -233,8 +241,4 @@ extension ViewController: IHistoryCellDelegate {
 		}
 		tableView.reloadData()
 	}
-	
 }
-
-
-

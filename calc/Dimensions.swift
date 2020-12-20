@@ -8,23 +8,23 @@
 
 import Foundation
 
-
 final class Dimensions {
 	
 	let stressAndPressureArray = [
-	StressAndPressure.MPa,
-	StressAndPressure.Pa,
-	StressAndPressure.psi,
-	StressAndPressure.bar
+		StressAndPressure.MPa,
+		StressAndPressure.Pa,
+		StressAndPressure.psi,
+		StressAndPressure.bar
 	]
-	
 	let diameterArray = [
-	Diameter.mm,
-	Diameter.inch,
-	Diameter.m,
+		Diameter.mm,
+		Diameter.inch,
+		Diameter.m,
 	]
+	}
 	
 	
+extension Dimensions {
 	enum StressAndPressure: String, CustomStringConvertible {
 		case MPa = "МПа"
 		case Pa = "Па"
@@ -32,13 +32,14 @@ final class Dimensions {
 		case bar = "атм"
 		var description: String { rawValue }
 	}
+}
 	
-	
+extension Dimensions {
 	enum Diameter: String, CustomStringConvertible {
 		case mm = "мм"
 		case inch = "дюйм"
 		case m = "м"
 		var description: String { rawValue }
 	}
-	
 }
+
