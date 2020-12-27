@@ -41,7 +41,7 @@ final class Cell: UITableViewCell {
 	func setNameDimensionButton(_ name: String?) {
 		dimensionButton.setTitle(name, for: .normal)
 	}
-	func setValueInputTextFiled(_ value: String?) {
+	func setValue(_ value: String?) {
 		inputTextField.text = value
 	}
 	

@@ -19,6 +19,7 @@ final class ViewController: UIViewController {
 	lazy var currentModel = inputModels[0]
 	var calculateResults: [HistoryCellModel] = []
 	var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
+	var currentRow = 0
 	
 	// MARK: - Lifecycle
 	
@@ -136,16 +137,17 @@ extension ViewController: UIPickerViewDelegate {
 	
 	func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 		if currentModel.sectionNumber == 0 {
-			guard	let inputIndex = inputModels.firstIndex(of: currentModel) else { return }
-			inputModels[inputIndex].currentButtonName = currentModel.dataSourceArray[row]
+			guard	let index = inputModels.firstIndex(of: currentModel) else { return }
+			inputModels[index].currentButtonName = currentModel.dataSourceArray[row]
 		} else if currentModel.sectionNumber == 1 {
-			guard	let outputIndex = outputModels.firstIndex(of: currentModel) else { return }
-			outputModels[outputIndex].currentButtonName = currentModel.dataSourceArray[row]
+			guard	let index = outputModels.firstIndex(of: currentModel) else { return }
+			outputModels[index].currentButtonName = currentModel.dataSourceArray[row]
 		}
 		os_log("kadyrov")
 		tableView.reloadData()
 		picker.isHidden = true
 		customView.isHidden = true
+		currentRow = 0
 	}
 }
 
@@ -182,16 +184,15 @@ extension ViewController: UITableViewDataSource {
 			var model = inputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
 			cell.setNameDimensionButton(model.currentButtonName.description)
-			cell.setValueInputTextFiled(model.textFieldValue)
+			cell.setValue(model.textFieldValue)
 			model.sectionNumber = 0
 			cell.model = model
-			
 			return cell
 		case 1:
 			var model = outputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
 			cell.setNameDimensionButton(model.currentButtonName.description)
-			cell.setValueInputTextFiled(model.textFieldValue)
+			cell.setValue(model.textFieldValue)
 			model.sectionNumber = 1
 			cell.model = model
 			return cell
@@ -216,9 +217,16 @@ extension ViewController: ICellDelegate {
 		picker.isHidden = false
 		self.view.addSubview(customView)
 		customView.isHidden = false
+		
+		for i in 0...currentModel.dataSourceArray.count-1 {
+			if currentModel.currentButtonName.description == currentModel.dataSourceArray[i].description {
+				picker.selectRow(currentRow, inComponent: 0, animated: false)
+				break
+			} else { currentRow += 1 }
+		}
+		
 		view.addSubview(picker)
 	}
-	
 	func didInputTextField(_ cell: Cell) {
 		guard let model = cell.model else { return }
 		currentModel = model

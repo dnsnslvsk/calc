@@ -21,8 +21,7 @@ final class Dimensions {
 		Diameter.inch,
 		Diameter.m,
 	]
-	}
-	
+}
 	
 extension Dimensions {
 	enum StressAndPressure: String, CustomStringConvertible {
