@@ -14,8 +14,17 @@ struct CellModel: Equatable {
 	}
 	let id = UUID()
 	var parameterName: String
-	var currentButtonName: CustomStringConvertible
-	var dataSourceArray: [CustomStringConvertible]
-	var textFieldValue: String
-	var sectionNumber: Int
+	var currentDimension: CustomStringConvertible
+	var avaliableDimensions: [CustomStringConvertible]
+	var parameterValue: String
+    var parameterType: ParameterType
 }
+
+enum ParameterType {
+    case input
+    case output
+}
+
+
+
+

@@ -56,12 +56,3 @@ extension HistoryTableViewController {
 		return cell
 	}
 }
-
-
-// MARK: - IHistoryCellDelegate
-
-protocol IHistoryCellDelegate {
-	func didSelectHistoryCell(_ historyCell: HistoryCellModel)
-}
-
-

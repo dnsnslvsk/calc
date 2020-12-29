@@ -12,6 +12,7 @@ class PickerFactory {
 	
 	static func makePicker() -> UIPickerView {
 		let picker = UIPickerView()
+        picker.backgroundColor = .systemBackground
 		return picker
 	}
 }

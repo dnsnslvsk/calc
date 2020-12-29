@@ -8,9 +8,8 @@
 //  
 
 import UIKit
-import os
 
-final class ViewController: UIViewController {
+class ViewController: UIViewController {
 	
 	// MARK: - Internal properties
 	
@@ -25,43 +24,30 @@ final class ViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 		let boltsCountDataSource = BoltsCountDataSource()
 		inputModels = boltsCountDataSource.inputModels
 		outputModels = boltsCountDataSource.outputModels
-		
-		// TODO: - Make Factory
-		self.navigationItem.title = "Количество болтов"
-		let doneItem = UIBarButtonItem(title: "История", style: .plain, target: self, action:  #selector(showHistory(_:)))
-		let menuItem = UIBarButtonItem(title: "Расчеты", style: .plain, target: self, action: .none)
-		self.navigationItem.setRightBarButton(doneItem, animated: true)
-		self.navigationItem.setLeftBarButton(menuItem, animated: true)
-		
-		configure()
-		picker.delegate = self
-		picker.dataSource = self
-		tableView.delegate = self
-		tableView.dataSource = self
+        configure()
 	}
 	
-	// MARK: - Public methods
+    // MARK: - Public methods
 	
 	let picker = PickerFactory.makePicker()
 	let tableView = TableFactory.makeTable()
 	lazy var customView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
 	
-	// MARK: - Internal methods
+    // MARK: - Internal methods
 	
 	enum Constant {
 		static let tableViewEstimatedRowHeight = 50
 	}
 	
 	private func didCalculate() {
-		let firstValue: String = inputModels[0].textFieldValue
-		let secondValue: String  = inputModels[1].textFieldValue
-		let thirdValue: String  = inputModels[2].textFieldValue
-		let fourthValue: String  = inputModels[3].textFieldValue
-		let fifthValue: String  = inputModels[4].textFieldValue
+		let firstValue: String = inputModels[0].parameterValue
+		let secondValue: String  = inputModels[1].parameterValue
+		let thirdValue: String  = inputModels[2].parameterValue
+		let fourthValue: String  = inputModels[3].parameterValue
+		let fifthValue: String  = inputModels[4].parameterValue
 		guard
 			let D1 = Float(firstValue),
 			let D2 = Float(secondValue),
@@ -71,8 +57,8 @@ final class ViewController: UIViewController {
 			else { return }
 		let calcCore = BoltsCountCalculationCore(D1: D1, D2: D2, P: P, d: d, στ: στ)
 		let result = calcCore.getFormattedResult()
-		for item in 0...outputModels.count-1 {
-			outputModels[item].textFieldValue = result[item]
+		for item in 0...outputModels.count - 1 {
+			outputModels[item].parameterValue = result[item]
 		}
 		tableView.reloadSections(IndexSet(integer: 1), with: .fade)
 		calculateResults.append(calcCore.getResultForHistory())
@@ -82,28 +68,48 @@ final class ViewController: UIViewController {
 	
 	func configure() {
 		configureCustomView(customView)
+        configureTitle()
+        configureLeftBarButton()
+        configureRightBarButton()
 		configureTable(tableView)
 		configurePicker(picker)
 	}
 	
 	private func configureCustomView(_ view: UIView) {
-		customView.backgroundColor = .black
-		customView.alpha = 0.9
+		customView.backgroundColor = .systemBackground
+        customView.alpha = 0.9
 	}
 	
+    private func configureTitle() {
+        self.navigationItem.title = "Количество болтов"
+    }
+
+    private func configureLeftBarButton() {
+         let menuItem = UIBarButtonItem(title: "Расчеты", style: .plain, target: self, action: .none)
+         navigationItem.setLeftBarButton(menuItem, animated: true)
+     }
+
+     private func configureRightBarButton() {
+         let doneItem = UIBarButtonItem(title: "История", style: .plain, target: self, action:  #selector(showHistory(_:)))
+         navigationItem.setRightBarButton(doneItem, animated: true)
+     }
+    
 	private func configurePicker(_ picker: UIPickerView) {
-		picker.frame = CGRect(x: 0, y: view.bounds.height/4, width: view.bounds.width, height: 150)
+		picker.frame = CGRect(x: 0, y: view.bounds.height/2, width: view.bounds.width, height: 100)
+        picker.delegate = self
+        picker.dataSource = self
 	}
 	
 	private func configureTable(_ table: UITableView) {
-		table.frame = CGRect(x: 0, y: 44, width: view.bounds.width, height: 550)
+		table.frame = view.bounds
+        tableView.delegate = self
+        tableView.dataSource = self
 		table.register(Cell.self, forCellReuseIdentifier: "cell")
 		view.addSubview(table)
 	}
 	
 	
-	
-	// MARK: - Actions
+    // MARK: - Actions
 	
 	@objc
 	private func showHistory(_: UIButton) {
@@ -114,36 +120,35 @@ final class ViewController: UIViewController {
 	}
 }
 
+// MARK: - UIPickerViewDelegate
+
 extension ViewController: UIPickerViewDataSource {
-	
-	// MARK: - UIPickerViewDelegate implementation
-	
-	func numberOfComponents(in picker: UIPickerView) -> Int {
+
+    func numberOfComponents(in picker: UIPickerView) -> Int {
 		return 1
 	}
 	
 	func pickerView(_ picker: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-		return currentModel.dataSourceArray.count
+		return currentModel.avaliableDimensions.count
 	}
 }
 
+// MARK: - UIPickerViewDataSource
+
 extension ViewController: UIPickerViewDelegate {
-	
-	// MARK: - UIPickerViewDataSource implementation
-	
+		
 	func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-		return currentModel.dataSourceArray[row].description
+		return currentModel.avaliableDimensions[row].description
 	}
 	
 	func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-		if currentModel.sectionNumber == 0 {
-			guard	let index = inputModels.firstIndex(of: currentModel) else { return }
-			inputModels[index].currentButtonName = currentModel.dataSourceArray[row]
-		} else if currentModel.sectionNumber == 1 {
-			guard	let index = outputModels.firstIndex(of: currentModel) else { return }
-			outputModels[index].currentButtonName = currentModel.dataSourceArray[row]
+        if currentModel.parameterType == ParameterType.input {
+			guard let index = inputModels.firstIndex(of: currentModel) else { return }
+			inputModels[index].currentDimension = currentModel.avaliableDimensions[row]
+        } else if currentModel.parameterType == ParameterType.output {
+			guard let index = outputModels.firstIndex(of: currentModel) else { return }
+			outputModels[index].currentDimension = currentModel.avaliableDimensions[row]
 		}
-		os_log("kadyrov")
 		tableView.reloadData()
 		picker.isHidden = true
 		customView.isHidden = true
@@ -151,15 +156,14 @@ extension ViewController: UIPickerViewDelegate {
 	}
 }
 
-extension ViewController: UITableViewDelegate {
-	
-	// MARK: - UITableViewDelegate implementation
-	
-}
+// MARK: - UITableViewDelegate
+
+extension ViewController: UITableViewDelegate { }
+
+// MARK: - UITableViewDataSource
 
 extension ViewController: UITableViewDataSource {
 	
-	// MARK: - UITableViewDataSource implementation
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return 2
@@ -181,19 +185,17 @@ extension ViewController: UITableViewDataSource {
 		cell.delegate = self
 		switch indexPath.section {
 		case 0:
-			var model = inputModels[indexPath.row]
+			let model = inputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
-			cell.setNameDimensionButton(model.currentButtonName.description)
-			cell.setValue(model.textFieldValue)
-			model.sectionNumber = 0
+			cell.setNameDimensionButton(model.currentDimension.description)
+			cell.setValue(model.parameterValue)
 			cell.model = model
 			return cell
 		case 1:
-			var model = outputModels[indexPath.row]
+			let model = outputModels[indexPath.row]
 			cell.setNameParameterLabel(model.parameterName)
-			cell.setNameDimensionButton(model.currentButtonName.description)
-			cell.setValue(model.textFieldValue)
-			model.sectionNumber = 1
+			cell.setNameDimensionButton(model.currentDimension.description)
+			cell.setValue(model.parameterValue)
 			cell.model = model
 			return cell
 		default:
@@ -206,9 +208,9 @@ extension ViewController: UITableViewDataSource {
 	}
 }
 
+// MARK: - ICellDelegate
+
 extension ViewController: ICellDelegate {
-	
-	// MARK: - ICellDelegate implementation
 	
 	func didSelectCell(_ cell: Cell) {
 		guard let model = cell.model else { return }
@@ -218,8 +220,8 @@ extension ViewController: ICellDelegate {
 		self.view.addSubview(customView)
 		customView.isHidden = false
 		
-		for i in 0...currentModel.dataSourceArray.count-1 {
-			if currentModel.currentButtonName.description == currentModel.dataSourceArray[i].description {
+		for i in 0...currentModel.avaliableDimensions.count - 1 {
+            if currentModel.currentDimension.description == currentModel.avaliableDimensions[i].description {
 				picker.selectRow(currentRow, inComponent: 0, animated: false)
 				break
 			} else { currentRow += 1 }
@@ -227,25 +229,25 @@ extension ViewController: ICellDelegate {
 		
 		view.addSubview(picker)
 	}
+    
 	func didInputTextField(_ cell: Cell) {
 		guard let model = cell.model else { return }
 		currentModel = model
 		guard let index = inputModels.firstIndex(of: currentModel) else { return }
-		inputModels[index].textFieldValue = cell.inputTextFieldValue
+		inputModels[index].parameterValue = cell.inputTextFieldValue
 		didCalculate()
 	}
 }
 
+// MARK: - IHistoryCellDelegate
+
 extension ViewController: IHistoryCellDelegate {
-	
-	// MARK: - IHistoryCellDelegate implementation
-	
 	func didSelectHistoryCell(_ historyCell: HistoryCellModel) {
-		for item in 0...historyCell.inputValues.count-1 {
-			inputModels[item].textFieldValue = historyCell.inputValues[item]
+		for item in 0...historyCell.inputValues.count - 1 {
+			inputModels[item].parameterValue = historyCell.inputValues[item]
 		}
-		for item in 0...historyCell.outputValues.count-1 {
-			outputModels[item].textFieldValue = historyCell.outputValues[item]
+		for item in 0...historyCell.outputValues.count - 1 {
+			outputModels[item].parameterValue = historyCell.outputValues[item]
 		}
 		tableView.reloadData()
 	}

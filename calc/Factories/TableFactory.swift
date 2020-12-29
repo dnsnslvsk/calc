@@ -10,7 +10,7 @@ import UIKit
 final class TableFactory: UITableView {
 	
 	static func makeTable() -> UITableView {
-		let table = UITableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+        let table = UITableView(frame: CGRect.zero, style: .grouped)
 		table.separatorInset = UIEdgeInsets.zero
 		return table
 	}

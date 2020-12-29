@@ -17,7 +17,7 @@ final class TexfFieldFactory {
 		textField.autocorrectionType = .no
 		textField.keyboardType = .numbersAndPunctuation
 		textField.returnKeyType = .continue
-		textField.clearButtonMode = .always
+		textField.clearButtonMode = .whileEditing
 		textField.textAlignment = .center
 		textField.placeholder = "0"
 		return textField

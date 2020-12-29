@@ -15,14 +15,11 @@ final class Cell: UITableViewCell {
 	var model: CellModel?
 	var delegate: ICellDelegate?
 	var inputTextFieldValue = ""
-	
-	// MARK: - Public methods
-
 	var parameterLabel = LabelFactory.makeLabel()
 	var dimensionButton = ButtonFactory.makeButton()
 	var inputTextField = TexfFieldFactory.makeTextField()
 	
-	// MARK: - Initialization
+	// MARK: - Lifecycle
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -45,9 +42,9 @@ final class Cell: UITableViewCell {
 		inputTextField.text = value
 	}
 	
-	// MARK: - Configure
+	// MARK: - Private methods  почему не конфиг как во вьюконтроллере?
 	
-	func configure() {
+	private func configure() {
 		configureParameterLabel(parameterLabel)
 		configureDimensionButton(dimensionButton)
 		configureInputTextField(inputTextField)
@@ -56,25 +53,25 @@ final class Cell: UITableViewCell {
 	private func configureParameterLabel(_ label: UILabel) {
 		parameterLabel.frame = CGRect(x: 10, y: 0, width: 205, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		parameterLabel.textAlignment = .left
-		addSubview(parameterLabel)
+        contentView.addSubview(parameterLabel)
 	}
 	
-	private func configureDimensionButton(_ button: UIButton) {
+	func configureDimensionButton(_ button: UIButton) {
 		dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
-		addSubview(dimensionButton)
+        contentView.addSubview(dimensionButton)
 	}
 	
 	private func configureInputTextField(_ textField: UITextField) {
 		inputTextField.frame = CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
-		addSubview(inputTextField)
+        contentView.addSubview(inputTextField)
 	}
 	
 	// MARK: - Actions
 
 	@objc
-	private func dimensionButtonAction(_: UIButton) {
+    func dimensionButtonAction(_: UIButton) {
 		delegate?.didSelectCell(self)
 	}
 	
@@ -84,13 +81,6 @@ final class Cell: UITableViewCell {
 		inputTextFieldValue = value
 		delegate?.didInputTextField(self)
 	}
-}
-
-// MARK: - ICellDelegate
-
-protocol ICellDelegate {
-	func didSelectCell(_ cell: Cell)
-	func didInputTextField(_ cell: Cell)
 }
 
 
