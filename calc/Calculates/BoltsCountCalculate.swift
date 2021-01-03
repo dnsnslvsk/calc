@@ -116,6 +116,7 @@ final class BoltsCountCalculationCore {
 	
 	func getResultForHistory() -> HistoryCellModel {
 		resultForHistory = getFormattedResult()
+
 		let historyModel = HistoryCellModel(
 			formattedResult:
 			"""

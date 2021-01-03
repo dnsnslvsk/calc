@@ -53,19 +53,19 @@ final class Cell: UITableViewCell {
 	private func configureParameterLabel(_ label: UILabel) {
 		parameterLabel.frame = CGRect(x: 10, y: 0, width: 205, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		parameterLabel.textAlignment = .left
-        contentView.addSubview(parameterLabel)
+    contentView.addSubview(parameterLabel)
 	}
 	
 	func configureDimensionButton(_ button: UIButton) {
 		dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
-        contentView.addSubview(dimensionButton)
+    contentView.addSubview(dimensionButton)
 	}
 	
 	private func configureInputTextField(_ textField: UITextField) {
 		inputTextField.frame = CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
 		inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
-        contentView.addSubview(inputTextField)
+    contentView.addSubview(inputTextField)
 	}
 	
 	// MARK: - Actions

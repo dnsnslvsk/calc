@@ -15,7 +15,7 @@ final class TexfFieldFactory {
 		textField.font = .systemFont(ofSize: 15)
 		textField.borderStyle = .roundedRect
 		textField.autocorrectionType = .no
-		textField.keyboardType = .numbersAndPunctuation
+    textField.keyboardType = .decimalPad
 		textField.returnKeyType = .continue
 		textField.clearButtonMode = .whileEditing
 		textField.textAlignment = .center
