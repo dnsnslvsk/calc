@@ -22,7 +22,6 @@ class HistoryTableViewController: UITableViewController {
 		super.viewDidLoad()
 		self.tableView.separatorInset = UIEdgeInsets.zero
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "historyCell")
-		tableView.rowHeight = UITableView.automaticDimension
 	}
 }
 
@@ -32,8 +31,8 @@ extension HistoryTableViewController {
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		model = models[indexPath.row]
-		navigationController?.popViewController(animated: true)
 		delegate?.didSelectHistoryCell(model)
+    dismiss(animated: true, completion: nil)
 	}
 }
 

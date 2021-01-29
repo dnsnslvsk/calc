@@ -12,12 +12,19 @@ final class Cell: UITableViewCell {
 	
 	// MARK: - Internal properties
 	
+  
+  
+  
 	var model: CellModel?
 	var delegate: ICellDelegate?
 	var inputTextFieldValue = ""
 	var parameterLabel = LabelFactory.makeLabel()
 	var dimensionButton = ButtonFactory.makeButton()
 	var inputTextField = TexfFieldFactory.makeTextField()
+  let picker = PickerFactory.makePicker()
+  
+  var currentRow = 0
+
 	
 	// MARK: - Lifecycle
 
@@ -42,38 +49,122 @@ final class Cell: UITableViewCell {
 		inputTextField.text = value
 	}
 	
-	// MARK: - Private methods  почему не конфиг как во вьюконтроллере?
+	// MARK: - Configure
 	
 	private func configure() {
 		configureParameterLabel(parameterLabel)
 		configureDimensionButton(dimensionButton)
 		configureInputTextField(inputTextField)
+    configurePicker(picker)
 	}
 	
 	private func configureParameterLabel(_ label: UILabel) {
-		parameterLabel.frame = CGRect(x: 10, y: 0, width: 205, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+    parameterLabel.backgroundColor = .cyan
+    parameterLabel.frame = CGRect.zero
 		parameterLabel.textAlignment = .left
     contentView.addSubview(parameterLabel)
+    parameterLabel.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      parameterLabel.heightAnchor.constraint(equalToConstant: 50),
+      parameterLabel.topAnchor.constraint(
+        equalTo: contentView.topAnchor,
+        constant: 0),
+      parameterLabel.rightAnchor.constraint(
+        equalTo: parameterLabel.leftAnchor,
+        constant: 200),
+      parameterLabel.bottomAnchor.constraint(
+        equalTo: parameterLabel.topAnchor,
+        constant: 50),
+      parameterLabel.leftAnchor.constraint(
+        equalTo: contentView.leftAnchor,
+        constant: 10),
+    ])
 	}
 	
 	func configureDimensionButton(_ button: UIButton) {
-		dimensionButton.frame = CGRect(x: 215, y: 0, width: 50, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+    dimensionButton.backgroundColor = .cyan
+    dimensionButton.frame = CGRect.zero
 		dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
+    dimensionButton.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dimensionButton)
+    NSLayoutConstraint.activate([
+      dimensionButton.heightAnchor.constraint(equalToConstant: 50),
+      dimensionButton.topAnchor.constraint(
+        equalTo: parameterLabel.topAnchor,
+        constant: 0),
+      dimensionButton.rightAnchor.constraint(
+        equalTo: contentView.rightAnchor,
+        constant: -110),
+      dimensionButton.bottomAnchor.constraint(
+        equalTo: parameterLabel.bottomAnchor,
+        constant: 0),
+      dimensionButton.leftAnchor.constraint(
+        equalTo: dimensionButton.rightAnchor,
+        constant: -50)
+    ])
 	}
 	
 	private func configureInputTextField(_ textField: UITextField) {
-		inputTextField.frame = CGRect(x: 265, y: 0, width: 100, height: ViewController.Constant.tableViewEstimatedRowHeight-6)
+    inputTextField.backgroundColor = .cyan
+    inputTextField.frame = CGRect.zero
 		inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
     contentView.addSubview(inputTextField)
+    inputTextField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      inputTextField.heightAnchor.constraint(equalToConstant: 50),
+      inputTextField.topAnchor.constraint(
+        equalTo: contentView.topAnchor,
+        constant: 0),
+      inputTextField.bottomAnchor.constraint(
+        equalTo: contentView.bottomAnchor,
+        constant: -50),
+      inputTextField.leftAnchor.constraint(
+        equalTo: inputTextField.rightAnchor,
+        constant: -100),
+      inputTextField.rightAnchor.constraint(
+        equalTo: contentView.rightAnchor,
+        constant: -10)
+    ])
 	}
-	
+  
+  private func configurePicker(_ picker: UIPickerView) {
+    picker.delegate = self
+    picker.dataSource = self
+    picker.isHidden = true
+    picker.backgroundColor = .brown
+    contentView.addSubview(picker)
+    picker.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      picker.topAnchor.constraint(
+        equalTo: parameterLabel.bottomAnchor,
+        constant: 0),
+      picker.rightAnchor.constraint(
+        equalTo: contentView.rightAnchor,
+        constant: -10),
+      picker.bottomAnchor.constraint(
+        equalTo: picker.topAnchor,
+        constant: 50),
+      picker.leftAnchor.constraint(
+        equalTo: contentView.leftAnchor,
+        constant: 10)
+    ])
+  }
+  
 	// MARK: - Actions
 
 	@objc
-    func dimensionButtonAction(_: UIButton) {
-		delegate?.didSelectCell(self)
-	}
+  func dimensionButtonAction(_: UIButton) {
+		delegate?.didClickButton(self)
+    guard let unwrappedModel = model else { return }
+    for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
+      if dimensionButton.titleLabel?.text == unwrappedModel.avaliableDimensions[i].description {
+        picker.selectRow(currentRow, inComponent: 0, animated: false)
+        break
+      } else { currentRow += 1 }
+    }
+    picker.reloadAllComponents()
+    picker.isHidden = false
+  }
 	
 	@objc
 	private func inputTextFieldAction(_: UITextField) {
@@ -83,4 +174,37 @@ final class Cell: UITableViewCell {
 	}
 }
 
+// MARK: - UIPickerViewDelegate
 
+extension Cell: UIPickerViewDataSource {
+  
+  func numberOfComponents(in picker: UIPickerView) -> Int {
+    return 1
+  }
+  
+  func pickerView(_ picker: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    guard let unwrappedModel = model else { return 0 }
+    return unwrappedModel.avaliableDimensions.count
+  }
+}
+
+// MARK: - UIPickerViewDataSource
+
+extension Cell: UIPickerViewDelegate {
+  
+  func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    guard let unwrappedModel = model else { return "" }
+    return unwrappedModel.avaliableDimensions[row].description
+  }
+  
+  func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    guard let unwrappedModel = model else { return }
+    dimensionButton.setTitle(unwrappedModel.avaliableDimensions[row].description, for: .normal)
+    model?.currentDimension = unwrappedModel.avaliableDimensions[row]
+    delegate?.didClickButton(self)
+
+    delegate?.didSelectPicker(self)
+    currentRow = 0
+    picker.isHidden = true
+  }
+}

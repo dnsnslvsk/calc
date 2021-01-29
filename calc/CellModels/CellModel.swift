@@ -17,7 +17,7 @@ struct CellModel: Equatable {
 	var currentDimension: CustomStringConvertible
 	var avaliableDimensions: [CustomStringConvertible]
 	var parameterValue: String
-    var parameterType: ParameterType
+  var parameterType: ParameterType
 }
 
 enum ParameterType {

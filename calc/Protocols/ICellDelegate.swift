@@ -7,6 +7,7 @@
 //
 
 protocol ICellDelegate {
-     func didSelectCell(_ cell: Cell)
-     func didInputTextField(_ cell: Cell)
- }
+  func didClickButton(_ cell: Cell)
+  func didInputTextField(_ cell: Cell)
+  func didSelectPicker(_ cell: Cell)
+}

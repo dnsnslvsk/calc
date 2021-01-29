@@ -13,37 +13,38 @@ final class BoltsCountDataSource {
 	// MARK: - Internal properties
 
 	let dimensions = Dimensions()
+  
 	lazy var inputModels = [
 		CellModel(
 			parameterName: "Больший диаметр, D1",
-			currentDimension: dimensions.diameterArray[0],
+      currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-            parameterType: ParameterType.input),
+      parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Меньший диаметер, D2",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-            parameterType: ParameterType.input),
+      parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Давление, P",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-            parameterType: ParameterType.input),
+      parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Диаметр срезного элемента, d",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-            parameterType: ParameterType.input),
+      parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Доп. напряжение на срез, [σ]τ",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-            parameterType: ParameterType.input),
+      parameterType: ParameterType.input),
 	]
 	lazy var outputModels = [
 		CellModel(
@@ -51,31 +52,31 @@ final class BoltsCountDataSource {
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-            parameterType: ParameterType.output),
+      parameterType: ParameterType.output),
 		CellModel(
 			parameterName: "Сечение крепежа, S2",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-            parameterType: ParameterType.output),
+      parameterType: ParameterType.output),
 		CellModel(
 			parameterName: "Сила от давления, F1",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-            parameterType: ParameterType.output),
+      parameterType: ParameterType.output),
 		CellModel(
 			parameterName: "Сила среза крепежа, F2",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-            parameterType: ParameterType.output),
+      parameterType: ParameterType.output),
 		CellModel(
 			parameterName: "Количество болтов, n",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-            parameterType: ParameterType.output),
+      parameterType: ParameterType.output),
 	]
 }
 
@@ -83,27 +84,30 @@ final class BoltsCountCalculationCore {
 	
 	// MARK: - Internal properties
 
-	let D1: Float
-	let D2: Float
-	let P: Float
-	let d: Float
-	let στ: Float
+	let D1: Double
+	let D2: Double
+	let P: Double
+	let d: Double
+	let στ: Double
 	var result: [String] = []
-	var S1: Float = 0
-	var S2: Float = 0
-	var F1: Float = 0
-	var F2: Float = 0
-	var n: Float = 0
+  
+	var S1: Double = 0
+	var S2: Double = 0
+	var F1: Double = 0
+	var F2: Double = 0
+	var n: Double = 0
 	var resultForHistory: [String] = []
 	
 	// MARK: - Internal methods
 
-	func calculate() -> [Float] {
-		S1 = round(Float.pi * ((D1*D1)/4 - (D2*D2)/4))
-		S2 = round(Float.pi * d * d / 4)
+	func calculate() -> [Double] {
+		S1 = round(Double.pi * ((D1*D1)/4 - (D2*D2)/4))
+		S2 = round(Double.pi * d * d / 4)
 		F1 = round(S1 * P)
 		F2 = round(στ * S2)
 		n = round(F1/F2)
+    
+    
 		return [S1, S2, F1, F2, n]
 	}
 	
@@ -116,7 +120,6 @@ final class BoltsCountCalculationCore {
 	
 	func getResultForHistory() -> HistoryCellModel {
 		resultForHistory = getFormattedResult()
-
 		let historyModel = HistoryCellModel(
 			formattedResult:
 			"""
@@ -128,20 +131,20 @@ final class BoltsCountCalculationCore {
 			Доп. напряжение на срез, [σ]τ =  \(στ) МПа
 			
 			РЕЗУЛЬТАТ:
-			Площадь под давлением, S1 =  \(resultForHistory[0]) мм²
-			Сечение крепежа, S2 =  \(resultForHistory[1]) мм²
-			Сила от давления, F1 =  \(resultForHistory[2]) Н
-			Сила среза крепежа, F2 =  \(resultForHistory[3]) Н
-			Количество болтов, n =  \(resultForHistory[4]) шт.
+			Площадь под давлением, S1 =  \(S1) мм²
+			Сечение крепежа, S2 =  \(S2) мм²
+			Сила от давления, F1 =  \(F1) Н
+			Сила среза крепежа, F2 =  \(F2) Н
+			Количество болтов, n =  \(n) шт.
 			""",
 			inputValues: ["\(D1)", "\(D2)", "\(P)", "\(d)", "\(στ)"],
-			outputValues: [resultForHistory[0],resultForHistory[1],resultForHistory[2],resultForHistory[3],resultForHistory[4]])
+			outputValues: ["\(S1)", "\(S2)", "\(F1)", "\(F2)", "\(n)"])
 		return historyModel
 	}
 	
 	// MARK: - Initialization
 
-	internal init(D1: Float, D2: Float, P: Float, d: Float, στ: Float) {
+	internal init(D1: Double, D2: Double, P: Double, d: Double, στ: Double) {
 		self.D1 = D1
 		self.D2 = D2
 		self.P = P
@@ -152,7 +155,7 @@ final class BoltsCountCalculationCore {
 
 extension BoltsCountCalculationCore {
 	
-	enum Parameters: Float, CaseIterable {
+	enum Parameters: Double, CaseIterable {
 		case D1
 		case D2
 		case P
