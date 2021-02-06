@@ -11,19 +11,16 @@ import UIKit
 final class Cell: UITableViewCell {
 	
 	// MARK: - Internal properties
-	
-  
-  
   
 	var model: CellModel?
 	var delegate: ICellDelegate?
-	var inputTextFieldValue = ""
+  
 	var parameterLabel = LabelFactory.makeLabel()
 	var dimensionButton = ButtonFactory.makeButton()
 	var inputTextField = TexfFieldFactory.makeTextField()
   let picker = PickerFactory.makePicker()
   
-  var currentRow = 0
+  var currentRowCounter = 0
 
 	
 	// MARK: - Lifecycle
@@ -107,7 +104,9 @@ final class Cell: UITableViewCell {
 	private func configureInputTextField(_ textField: UITextField) {
     inputTextField.backgroundColor = .cyan
     inputTextField.frame = CGRect.zero
-		inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
+    inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
+
+		
     contentView.addSubview(inputTextField)
     inputTextField.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
@@ -154,22 +153,27 @@ final class Cell: UITableViewCell {
 
 	@objc
   func dimensionButtonAction(_: UIButton) {
-		delegate?.didClickButton(self)
+    ///как отключить кнопки во всех ячейках
+
     guard let unwrappedModel = model else { return }
     for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
       if dimensionButton.titleLabel?.text == unwrappedModel.avaliableDimensions[i].description {
-        picker.selectRow(currentRow, inComponent: 0, animated: false)
+        picker.selectRow(currentRowCounter, inComponent: 0, animated: false)
         break
-      } else { currentRow += 1 }
+      } else { currentRowCounter += 1 }
     }
+    guard let value = inputTextField.text else { return }
+    model?.parameterValue = value
+    delegate?.didClickButton(self)
     picker.reloadAllComponents()
     picker.isHidden = false
+    print ("BUTTON CLICKED")
   }
 	
 	@objc
 	private func inputTextFieldAction(_: UITextField) {
 		guard let value = inputTextField.text else { return }
-		inputTextFieldValue = value
+    model?.parameterValue = value
 		delegate?.didInputTextField(self)
 	}
 }
@@ -201,10 +205,8 @@ extension Cell: UIPickerViewDelegate {
     guard let unwrappedModel = model else { return }
     dimensionButton.setTitle(unwrappedModel.avaliableDimensions[row].description, for: .normal)
     model?.currentDimension = unwrappedModel.avaliableDimensions[row]
-    delegate?.didClickButton(self)
-
     delegate?.didSelectPicker(self)
-    currentRow = 0
+    currentRowCounter = 0
     picker.isHidden = true
   }
 }

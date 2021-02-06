@@ -17,33 +17,36 @@ final class BoltsCountDataSource {
 	lazy var inputModels = [
 		CellModel(
 			parameterName: "Больший диаметр, D1",
+      qwe: dimensions.diameterArray[0],
       currentDimension: dimensions.diameterArray[0],
+      currentDimensionLength: dimensions.diameterArray[0], //таким образом индивидуально для каждой модели
 			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "",
+			parameterValue: "1000",
       parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Меньший диаметер, D2",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "",
+			parameterValue: "100",
       parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Давление, P",
 			currentDimension: dimensions.stressAndPressureArray[0],
+      currentDimensionStress: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "",
+			parameterValue: "100",
       parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Диаметр срезного элемента, d",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "",
+			parameterValue: "10",
       parameterType: ParameterType.input),
 		CellModel(
 			parameterName: "Доп. напряжение на срез, [σ]τ",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "",
+			parameterValue: "200",
       parameterType: ParameterType.input),
 	]
 	lazy var outputModels = [
@@ -107,7 +110,6 @@ final class BoltsCountCalculationCore {
 		F2 = round(στ * S2)
 		n = round(F1/F2)
     
-    
 		return [S1, S2, F1, F2, n]
 	}
 	
@@ -156,7 +158,7 @@ final class BoltsCountCalculationCore {
 extension BoltsCountCalculationCore {
 	
 	enum Parameters: Double, CaseIterable {
-		case D1
+    case D1
 		case D2
 		case P
 		case d

@@ -18,11 +18,13 @@ class ViewController: UIViewController {
   lazy var currentModel = inputModels[0]
   var calculateResults: [HistoryCellModel] = []
   var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
-  var currentRow = 0
-  let dimensions = Dimensions()
   
-  var coefficient: Double = 1
-
+  
+  var validatedDimensionPressure = Measurement(value: 0, unit: UnitPressure.gigapascals)
+  var validatedDimensionLength = Measurement(value: 0, unit: UnitLength.millimeters)
+  
+  lazy var convertedValuePressure = Measurement(value: 0, unit: UnitPressure.megapascals)
+  lazy var convertedValueLength = Measurement(value: 0, unit: UnitLength.millimeters)
   
   // MARK: - Lifecycle
   
@@ -39,9 +41,9 @@ class ViewController: UIViewController {
   
   let tableView = TableFactory.makeTable()
   
-  enum Constant {
-    static let tableViewEstimatedRowHeight = 50
-  }
+//  enum Constant {
+//    static let tableViewEstimatedRowHeight = 50
+//  }
   
   private func didCalculate() {
     let firstValue: String = inputModels[0].parameterValue
@@ -63,6 +65,70 @@ class ViewController: UIViewController {
     }
     tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     calculateResults.append(calcCore.getResultForHistory())
+  }
+  
+  func validationDimension(model: CellModel) {
+    guard let unwrappedValue = Double(model.parameterValue) else { return }
+    switch model.currentDimension.description {
+    case "МПа":
+      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals)
+    case "Па":
+      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals) * 1000000
+    case "psi":
+      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.poundsForcePerSquareInch)
+    case "атм":
+      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.bars)
+    case "мм":
+      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.millimeters)
+    case "дюйм":
+      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.inches)
+    case "м":
+      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.meters)
+    default:
+      return
+    }
+  }
+  
+  func convertValues(model: CellModel) -> String {
+    let model = currentModel
+    ///как упаковать все размерности в unwrappedValidatedDimension без указания unit
+    let unwrappedValidatedDimensionPressure = validatedDimensionPressure
+    let unwrappedValidatedDimensionLenght = validatedDimensionLength
+    switch model.currentDimension.description {
+    case "МПа":
+      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.megapascals)
+    case "Па":
+      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.megapascals) * 1000000
+    case "psi":
+      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.poundsForcePerSquareInch)
+    case "атм":
+      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.bars)
+    case "мм":
+      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.millimeters)
+    case "дюйм":
+      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.inches)
+    case "м":
+      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.meters)
+    default:
+      return ""
+    }
+    
+    let formatter = MeasurementFormatter()
+    formatter.unitStyle = .short
+    formatter.unitOptions = .providedUnit
+    formatter.locale = .current
+    if validatedDimensionPressure == Measurement(value: 0, unit: UnitPressure.gigapascals) {
+      print(round(1000*convertedValueLength.value)/1000, convertedValueLength.unit)
+      let result = formatter.string(from: convertedValueLength)
+      let formattedResult = String(result.filter { "01234567890.".contains($0) })
+      print(formattedResult)
+      return formattedResult
+    } else {
+      print(convertedValuePressure)
+      let result = formatter.string(from: convertedValuePressure)
+      let formattedResult = String(result.filter { "01234567890.".contains($0) })
+      return formattedResult
+    }
   }
   
   // MARK: - Configure
@@ -96,7 +162,6 @@ class ViewController: UIViewController {
     view.addSubview(table)
   }
   
-  
   // MARK: - Actions
   
   @objc
@@ -107,45 +172,6 @@ class ViewController: UIViewController {
     self.present(vc, animated: true, completion: nil)
   }
 }
-
-/*
- 
-// MARK: - UIPickerViewDelegate
-
-extension ViewController: UIPickerViewDataSource {
-  
-  func numberOfComponents(in picker: UIPickerView) -> Int {
-    return 1
-  }
-  
-  func pickerView(_ picker: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    return currentModel.avaliableDimensions.count
-  }
-}
-
-// MARK: - UIPickerViewDataSource
-
-extension ViewController: UIPickerViewDelegate {
-  
-  func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-    return currentModel.avaliableDimensions[row].description
-  }
-  
-  func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    if currentModel.parameterType == ParameterType.input {
-      guard let index = inputModels.firstIndex(of: currentModel) else { return }
-      inputModels[index].currentDimension = currentModel.avaliableDimensions[row]
-    } else if currentModel.parameterType == ParameterType.output {
-      guard let index = outputModels.firstIndex(of: currentModel) else { return }
-      outputModels[index].currentDimension = currentModel.avaliableDimensions[row]
-    }
-    tableView.reloadData()
-    picker.isHidden = true
-    currentRow = 0
-  }
-}
-*/
- 
  
 // MARK: - UITableViewDelegate
 
@@ -156,7 +182,6 @@ extension ViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 
 extension ViewController: UITableViewDataSource {
-  
   
   func numberOfSections(in tableView: UITableView) -> Int {
     return 2
@@ -198,37 +223,9 @@ extension ViewController: UITableViewDataSource {
     }
   }
   
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> Int {
-    return Constant.tableViewEstimatedRowHeight
-  }
-  
-  
-  
-  func convert(_ model: CellModel, _ valueString: String) -> String {
-    switch model.currentDimension.description {
-    case "МПа":
-      coefficient = 1
-    case "Па":
-      coefficient = 1000000
-    case "psi":
-      coefficient = 145.038
-    case "атм":
-      coefficient = 9.869
-    case "мм":
-      coefficient = 1
-    case "дюйм":
-      coefficient = 0.03937
-    case "м":
-      coefficient = 0.001
-    default:
-      coefficient = 100
-    }
-    let value = Double(valueString)
-    guard let unwrappedValue = value else { return "" }
-    let convertedValue = unwrappedValue * coefficient
-    print (convertedValue)
-    return String(convertedValue)
-  }
+//  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> Int {
+//    return Constant.tableViewEstimatedRowHeight
+//  }
 }
 
 // MARK: - ICellDelegate
@@ -241,37 +238,41 @@ extension ViewController: ICellDelegate {
     switch currentModel.parameterType {
     case .input:
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
+      inputModels[index].parameterValue = currentModel.parameterValue
+      validationDimension(model: currentModel)
+    case .output:
+      guard let index = outputModels.firstIndex(of: currentModel) else { return }
+      outputModels[index].parameterValue = currentModel.parameterValue
+      validationDimension(model: currentModel)
+    }
+    print(currentModel.parameterValue)
+  }
+  
+  func didSelectPicker(_ cell: Cell) {
+    guard let model = cell.model else { return }
+    currentModel = model
+    switch currentModel.parameterType {
+    case .input:
+      guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].currentDimension = currentModel.currentDimension
+      inputModels[index].parameterValue = convertValues(model: currentModel)
+      tableView.reloadData()
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].currentDimension = currentModel.currentDimension
+      outputModels[index].parameterValue = convertValues(model: currentModel)
+      tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
   }
-  
-  
   
   func didInputTextField(_ cell: Cell) {
     guard let model = cell.model else { return }
     currentModel = model
     guard let index = inputModels.firstIndex(of: currentModel) else { return }
-    inputModels[index].parameterValue = cell.inputTextFieldValue
+    inputModels[index].parameterValue = currentModel.parameterValue
     didCalculate()
   }
-  
-  func didSelectPicker(_ cell: Cell) {
-    
-    guard let model = cell.model else { return }
-    currentModel = model
-    guard let index = inputModels.firstIndex(of: currentModel) else { return }
-    inputModels[index].parameterValue = convert(currentModel, cell.inputTextFieldValue) //cell.inputTextFieldValue
-
-    tableView.reloadData()
-  }
-  
 }
-
-
-
 
 // MARK: - IHistoryCellDelegate
 
@@ -286,3 +287,6 @@ extension ViewController: IHistoryCellDelegate {
     tableView.reloadData()
   }
 }
+
+
+

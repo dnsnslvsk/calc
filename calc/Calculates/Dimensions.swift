@@ -30,20 +30,9 @@ extension Dimensions {
     case psi = "psi"
     case bar = "атм"
     var description: String { rawValue }
-    var coefficient: Double {
-      switch self {
-      case .MPa:
-        return 1
-      case .Pa:
-        return 0.000001
-      case .psi:
-        return 145.038
-      case .bar:
-        return 9.869
-      }
     }
   }
-}
+
 
 extension Dimensions {
   enum Diameter: String, CustomStringConvertible {
@@ -51,17 +40,8 @@ extension Dimensions {
     case inch = "дюйм"
     case m = "м"
     var description: String { rawValue }
-    var coefficient: Double {
-      switch self {
-      case .mm:
-        return 1
-      case .inch:
-        return 0.03937
-      case .m:
-        return 0.001
-      }
     }
   }
-}
+
 
 
