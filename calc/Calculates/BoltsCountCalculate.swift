@@ -17,9 +17,7 @@ final class BoltsCountDataSource {
 	lazy var inputModels = [
 		CellModel(
 			parameterName: "Больший диаметр, D1",
-      qwe: dimensions.diameterArray[0],
       currentDimension: dimensions.diameterArray[0],
-      currentDimensionLength: dimensions.diameterArray[0], //таким образом индивидуально для каждой модели
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "1000",
       parameterType: ParameterType.input),
@@ -32,7 +30,6 @@ final class BoltsCountDataSource {
 		CellModel(
 			parameterName: "Давление, P",
 			currentDimension: dimensions.stressAndPressureArray[0],
-      currentDimensionStress: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "100",
       parameterType: ParameterType.input),
@@ -146,12 +143,12 @@ final class BoltsCountCalculationCore {
 	
 	// MARK: - Initialization
 
-	internal init(D1: Double, D2: Double, P: Double, d: Double, στ: Double) {
-		self.D1 = D1
-		self.D2 = D2
-		self.P = P
-		self.d = d
-		self.στ = στ
+	internal init(inputValues: [Double]) {
+    self.D1 = inputValues[0]
+		self.D2 = inputValues[1]
+		self.P = inputValues[2]
+		self.d = inputValues[3]
+		self.στ = inputValues[4]
 	}
 }
 

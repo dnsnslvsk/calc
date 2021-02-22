@@ -14,13 +14,8 @@ struct CellModel: Equatable {
 	}
 	let id = UUID()
 	var parameterName: String
-  var qwe: Any?
   var currentDimension: CustomStringConvertible
-  var currentDimensionStress: Dimensions.StressAndPressure?
-  var currentDimensionLength: Dimensions.Diameter?
   var avaliableDimensions: [CustomStringConvertible]
-  var avaliableDimensionsStress: Dimensions.StressAndPressure?
-  var avaliableDimensionsLength: Dimensions.Diameter?
 	var parameterValue: String
   var parameterType: ParameterType
 }

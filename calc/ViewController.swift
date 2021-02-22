@@ -18,117 +18,111 @@ class ViewController: UIViewController {
   lazy var currentModel = inputModels[0]
   var calculateResults: [HistoryCellModel] = []
   var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
-  
-  
-  var validatedDimensionPressure = Measurement(value: 0, unit: UnitPressure.gigapascals)
-  var validatedDimensionLength = Measurement(value: 0, unit: UnitLength.millimeters)
-  
-  lazy var convertedValuePressure = Measurement(value: 0, unit: UnitPressure.megapascals)
-  lazy var convertedValueLength = Measurement(value: 0, unit: UnitLength.millimeters)
+  var validatedDimension: Measurement<Dimension>?
+  var convertedValue: Measurement<Dimension>?
   
   // MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    let boltsCountDataSource = BoltsCountDataSource()
-    inputModels = boltsCountDataSource.inputModels
-    outputModels = boltsCountDataSource.outputModels
+    let calculate = BoltsCountDataSource()
+    inputModels = calculate.inputModels
+    outputModels = calculate.outputModels
     configure()
   }
-  
   
   // MARK: - Internal methods
   
   let tableView = TableFactory.makeTable()
   
-//  enum Constant {
-//    static let tableViewEstimatedRowHeight = 50
-//  }
-  
   private func didCalculate() {
-    let firstValue: String = inputModels[0].parameterValue
-    let secondValue: String  = inputModels[1].parameterValue
-    let thirdValue: String  = inputModels[2].parameterValue
-    let fourthValue: String  = inputModels[3].parameterValue
-    let fifthValue: String  = inputModels[4].parameterValue
-    guard
-      let D1 = Double(firstValue),
-      let D2 = Double(secondValue),
-      let P = Double(thirdValue),
-      let d = Double(fourthValue),
-      let στ = Double(fifthValue)
-    else { return }
-    let calcCore = BoltsCountCalculationCore(D1: D1, D2: D2, P: P, d: d, στ: στ)
-    let result = calcCore.getFormattedResult()
+    var inputValues: [Double] = []
+    for item in 0...inputModels.count - 1 {
+      guard let doubleValue = Double(inputModels[item].parameterValue) else { return }
+      inputValues.append(doubleValue)
+    }
+    let calculationCore = BoltsCountCalculationCore(inputValues: inputValues)
+    
+    let result = calculationCore.getFormattedResult()
     for item in 0...outputModels.count - 1 {
       outputModels[item].parameterValue = result[item]
     }
     tableView.reloadSections(IndexSet(integer: 1), with: .fade)
-    calculateResults.append(calcCore.getResultForHistory())
+    calculateResults.append(calculationCore.getResultForHistory())
   }
   
-  func validationDimension(model: CellModel) {
+  func didValidateDimension(model: CellModel) {
     guard let unwrappedValue = Double(model.parameterValue) else { return }
-    switch model.currentDimension.description {
-    case "МПа":
-      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals)
-    case "Па":
-      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals) * 1000000
-    case "psi":
-      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.poundsForcePerSquareInch)
-    case "атм":
-      validatedDimensionPressure = Measurement(value: unwrappedValue, unit: UnitPressure.bars)
-    case "мм":
-      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.millimeters)
-    case "дюйм":
-      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.inches)
-    case "м":
-      validatedDimensionLength = Measurement(value: unwrappedValue, unit: UnitLength.meters)
-    default:
-      return
-    }
+      switch model.currentDimension.description {
+      case "МПа":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals)
+      case "Па":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.newtonsPerMetersSquared)
+      case "psi":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.poundsForcePerSquareInch)
+      case "атм":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.bars)
+      case "мм":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.millimeters)
+      case "дюйм":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.inches)
+      case "м":
+        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.meters)
+      default:
+        return
+      }
   }
   
   func convertValues(model: CellModel) -> String {
     let model = currentModel
-    ///как упаковать все размерности в unwrappedValidatedDimension без указания unit
-    let unwrappedValidatedDimensionPressure = validatedDimensionPressure
-    let unwrappedValidatedDimensionLenght = validatedDimensionLength
-    switch model.currentDimension.description {
-    case "МПа":
-      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.megapascals)
-    case "Па":
-      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.megapascals) * 1000000
-    case "psi":
-      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.poundsForcePerSquareInch)
-    case "атм":
-      convertedValuePressure = unwrappedValidatedDimensionPressure.converted(to: UnitPressure.bars)
-    case "мм":
-      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.millimeters)
-    case "дюйм":
-      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.inches)
-    case "м":
-      convertedValueLength = unwrappedValidatedDimensionLenght.converted(to: UnitLength.meters)
+    guard let unwrappedValidatedDimension = validatedDimension else { return "" }
+    switch unwrappedValidatedDimension.unit {
+    case is UnitPressure:
+      switch model.currentDimension.description {
+      case "МПа":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.megapascals)
+      case "Па":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.newtonsPerMetersSquared)
+      case "psi":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.poundsForcePerSquareInch)
+      case "атм":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.bars)
+      default:
+        return ""
+      }
+    case is UnitLength:
+      switch model.currentDimension.description {
+      case "мм":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.millimeters)
+      case "дюйм":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.inches)
+      case "м":
+        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.meters)
+      default:
+        return ""
+      }
     default:
       return ""
     }
-    
-    let formatter = MeasurementFormatter()
-    formatter.unitStyle = .short
-    formatter.unitOptions = .providedUnit
-    formatter.locale = .current
-    if validatedDimensionPressure == Measurement(value: 0, unit: UnitPressure.gigapascals) {
-      print(round(1000*convertedValueLength.value)/1000, convertedValueLength.unit)
-      let result = formatter.string(from: convertedValueLength)
-      let formattedResult = String(result.filter { "01234567890.".contains($0) })
-      print(formattedResult)
-      return formattedResult
-    } else {
-      print(convertedValuePressure)
-      let result = formatter.string(from: convertedValuePressure)
-      let formattedResult = String(result.filter { "01234567890.".contains($0) })
-      return formattedResult
-    }
+//    let formatter = MeasurementFormatter()
+//    formatter.unitStyle = .short
+//    formatter.unitOptions = .providedUnit
+//    formatter.locale = .current
+//    if validatedDimensionPressure == Measurement(value: 0, unit: UnitPressure.gigapascals) {
+//      print(round(1000*convertedValueLength.value)/1000, convertedValueLength.unit)
+//      let result = formatter.string(from: convertedValueLength)
+//      let formattedResult = String(result.filter { "01234567890.".contains($0) })
+//      print(formattedResult)
+//      return formattedResult
+//    } else {
+//      print(convertedValuePressure)
+//      let result = formatter.string(from: convertedValuePressure)
+//      let formattedResult = String(result.filter { "01234567890.".contains($0) })
+//      return formattedResult
+//    }
+    guard let unwrappedConvertedValue = convertedValue?.value else { return "" }
+    let result = String(round(100*unwrappedConvertedValue)/100)
+    return result
   }
   
   // MARK: - Configure
@@ -239,11 +233,11 @@ extension ViewController: ICellDelegate {
     case .input:
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].parameterValue = currentModel.parameterValue
-      validationDimension(model: currentModel)
+      didValidateDimension(model: currentModel)
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].parameterValue = currentModel.parameterValue
-      validationDimension(model: currentModel)
+      didValidateDimension(model: currentModel)
     }
     print(currentModel.parameterValue)
   }
