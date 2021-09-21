@@ -21,13 +21,14 @@ final class Cell: UITableViewCell {
   let picker = PickerFactory.makePicker()
   
   var currentRowCounter = 0
-
+  
 	
 	// MARK: - Lifecycle
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		configure()
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    configure()
+    inputTextField.delegate = self
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -50,42 +51,72 @@ final class Cell: UITableViewCell {
 	
 	private func configure() {
 		configureParameterLabel(parameterLabel)
+    configureParameterLabelConstraints()
 		configureDimensionButton(dimensionButton)
+    configureDimensionButtonConstraints()
 		configureInputTextField(inputTextField)
+    configureInputTextFieldConstraints()
     configurePicker(picker)
+    configurePickerConstraints()
 	}
 	
 	private func configureParameterLabel(_ label: UILabel) {
-    parameterLabel.backgroundColor = .cyan
-    parameterLabel.frame = CGRect.zero
-		parameterLabel.textAlignment = .left
-    contentView.addSubview(parameterLabel)
+    //label.backgroundColor = .cyan
+    label.frame = CGRect.zero
+    label.textAlignment = .left
+    contentView.addSubview(label)
+	}
+	
+	func configureDimensionButton(_ button: UIButton) {
+    //button.backgroundColor = .cyan
+    button.frame = CGRect.zero
+    button.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
+    contentView.addSubview(button)
+	}
+	
+	private func configureInputTextField(_ textField: UITextField) {
+    //textField.backgroundColor = .cyan
+    textField.frame = CGRect.zero
+    textField.keyboardType = .default
+    textField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
+    contentView.addSubview(textField)
+	}
+  
+  private func configurePicker(_ picker: UIPickerView) {
+    picker.delegate = self
+    picker.dataSource = self
+    picker.isHidden = false
+    //picker.backgroundColor = .brown
+    contentView.addSubview(picker)
+  }
+  
+  // MARK: - Constraints
+  
+  private func configureParameterLabelConstraints() {
     parameterLabel.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      parameterLabel.heightAnchor.constraint(equalToConstant: 50),
+      parameterLabel.heightAnchor.constraint(
+        equalToConstant: 50),
       parameterLabel.topAnchor.constraint(
         equalTo: contentView.topAnchor,
-        constant: 0),
+        constant: 8),
       parameterLabel.rightAnchor.constraint(
         equalTo: parameterLabel.leftAnchor,
         constant: 200),
-      parameterLabel.bottomAnchor.constraint(
-        equalTo: parameterLabel.topAnchor,
-        constant: 50),
+//      parameterLabel.bottomAnchor.constraint(
+//        equalTo: contentView.bottomAnchor,
+//        constant: -8),
       parameterLabel.leftAnchor.constraint(
         equalTo: contentView.leftAnchor,
         constant: 10),
     ])
-	}
-	
-	func configureDimensionButton(_ button: UIButton) {
-    dimensionButton.backgroundColor = .cyan
-    dimensionButton.frame = CGRect.zero
-		dimensionButton.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
+  }
+  
+  func configureDimensionButtonConstraints() {
     dimensionButton.translatesAutoresizingMaskIntoConstraints = false
-    contentView.addSubview(dimensionButton)
     NSLayoutConstraint.activate([
-      dimensionButton.heightAnchor.constraint(equalToConstant: 50),
+//      dimensionButton.heightAnchor.constraint(
+//        equalToConstant: 50),
       dimensionButton.topAnchor.constraint(
         equalTo: parameterLabel.topAnchor,
         constant: 0),
@@ -99,24 +130,19 @@ final class Cell: UITableViewCell {
         equalTo: dimensionButton.rightAnchor,
         constant: -50)
     ])
-	}
-	
-	private func configureInputTextField(_ textField: UITextField) {
-    inputTextField.backgroundColor = .cyan
-    inputTextField.frame = CGRect.zero
-    inputTextField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
-
-		
-    contentView.addSubview(inputTextField)
+  }
+  
+  func configureInputTextFieldConstraints() {
     inputTextField.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      inputTextField.heightAnchor.constraint(equalToConstant: 50),
+//      inputTextField.heightAnchor.constraint(
+//        equalToConstant: 50),
       inputTextField.topAnchor.constraint(
-        equalTo: contentView.topAnchor,
+        equalTo: parameterLabel.topAnchor,
         constant: 0),
       inputTextField.bottomAnchor.constraint(
-        equalTo: contentView.bottomAnchor,
-        constant: -50),
+        equalTo: parameterLabel.bottomAnchor,
+        constant: 0),
       inputTextField.leftAnchor.constraint(
         equalTo: inputTextField.rightAnchor,
         constant: -100),
@@ -124,37 +150,33 @@ final class Cell: UITableViewCell {
         equalTo: contentView.rightAnchor,
         constant: -10)
     ])
-	}
+  }
   
-  private func configurePicker(_ picker: UIPickerView) {
-    picker.delegate = self
-    picker.dataSource = self
-    picker.isHidden = true
-    picker.backgroundColor = .brown
-    contentView.addSubview(picker)
+  func configurePickerConstraints() {
     picker.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
+      picker.heightAnchor.constraint(
+        equalToConstant: 100),
       picker.topAnchor.constraint(
         equalTo: parameterLabel.bottomAnchor,
         constant: 0),
       picker.rightAnchor.constraint(
         equalTo: contentView.rightAnchor,
         constant: -10),
-      picker.bottomAnchor.constraint(
-        equalTo: picker.topAnchor,
-        constant: 50),
+//      picker.bottomAnchor.constraint(
+//        equalTo: contentView.bottomAnchor,
+//        constant: -8),
       picker.leftAnchor.constraint(
         equalTo: contentView.leftAnchor,
         constant: 10)
     ])
   }
   
-	// MARK: - Actions
+  	// MARK: - Actions
 
 	@objc
   func dimensionButtonAction(_: UIButton) {
     ///как отключить кнопки во всех ячейках
-
     guard let unwrappedModel = model else { return }
     for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
       if dimensionButton.titleLabel?.text == unwrappedModel.avaliableDimensions[i].description {
@@ -165,9 +187,12 @@ final class Cell: UITableViewCell {
     guard let value = inputTextField.text else { return }
     model?.parameterValue = value
     delegate?.didClickButton(self)
+    model?.isExpanded = .didExpanded
     picker.reloadAllComponents()
     picker.isHidden = false
+
     print ("BUTTON CLICKED")
+    
   }
 	
 	@objc
@@ -208,5 +233,16 @@ extension Cell: UIPickerViewDelegate {
     delegate?.didSelectPicker(self)
     currentRowCounter = 0
     picker.isHidden = true
+    model?.isExpanded = .notExpanded
+    
   }
 }
+  
+  extension Cell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+        self.contentView.endEditing(true)
+        return true
+    }
+  
+}
+

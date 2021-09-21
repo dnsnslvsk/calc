@@ -20,6 +20,13 @@ class ViewController: UIViewController {
   var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
   var validatedDimension: Measurement<Dimension>?
   var convertedValue: Measurement<Dimension>?
+  var buttonClicked: Bool?
+  let tableView = TableFactory.makeTable()
+
+  let selectedCellHeight: CGFloat = 166.0
+  let unselectedCellHeight: CGFloat = 66.0
+  
+  
   
   // MARK: - Lifecycle
   
@@ -31,9 +38,13 @@ class ViewController: UIViewController {
     configure()
   }
   
+//  override func viewWillAppear(_ animated: Bool) {
+//    tableView.estimatedRowHeight = 300
+//    tableView.rowHeight = UITableView.automaticDimension
+//  }
+  
   // MARK: - Internal methods
   
-  let tableView = TableFactory.makeTable()
   
   private func didCalculate() {
     var inputValues: [Double] = []
@@ -152,6 +163,8 @@ class ViewController: UIViewController {
     table.frame = view.bounds
     tableView.delegate = self
     tableView.dataSource = self
+
+    
     table.register(Cell.self, forCellReuseIdentifier: "cell")
     view.addSubview(table)
   }
@@ -170,7 +183,20 @@ class ViewController: UIViewController {
 // MARK: - UITableViewDelegate
 
 extension ViewController: UITableViewDelegate {
-  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//    if selectedCellIndexPath != nil && selectedCellIndexPath! as IndexPath == indexPath {
+//        selectedCellIndexPath = nil
+//    } else {
+//        selectedCellIndexPath! as IndexPath = indexPath
+//    }
+//
+//    tableView.beginUpdates()
+//    tableView.endUpdates()
+//
+//    if selectedCellIndexPath != nil {
+//      tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+//    }
+  }
 }
 
 // MARK: - UITableViewDataSource
@@ -215,11 +241,46 @@ extension ViewController: UITableViewDataSource {
     default:
       return cell
     }
+    
   }
   
-//  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> Int {
-//    return Constant.tableViewEstimatedRowHeight
+//  func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//    self.tableView.estimatedRowHeight = 80 // or any other number that makes sense for your cells
+//    self.tableView.rowHeight = UITableView.automaticDimension
+//    return UITableView.automaticDimension
 //  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    switch indexPath.section {
+    case 0:
+      let model = inputModels[indexPath.row]
+      switch model.isExpanded {
+      case .didExpanded:
+        return selectedCellHeight
+      case .notExpanded:
+        return unselectedCellHeight
+      case .notExpandable:
+        return unselectedCellHeight
+      }
+    case 1:
+      let model = outputModels[indexPath.row]
+      switch model.isExpanded {
+      case .didExpanded:
+        return selectedCellHeight
+      case .notExpanded:
+        return unselectedCellHeight
+      case .notExpandable:
+        return unselectedCellHeight
+      }
+    default:
+      return 0
+    }
+    
+//    if selectedCellIndexPath! as IndexPath == indexPath {
+//        return selectedCellHeight
+//    }
+//    return unselectedCellHeight
+      }
 }
 
 // MARK: - ICellDelegate
@@ -233,12 +294,18 @@ extension ViewController: ICellDelegate {
     case .input:
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].parameterValue = currentModel.parameterValue
+      inputModels[index].isExpanded = .didExpanded
       didValidateDimension(model: currentModel)
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].parameterValue = currentModel.parameterValue
+      outputModels[index].isExpanded = .didExpanded
       didValidateDimension(model: currentModel)
     }
+    print ("row selected")
+    buttonClicked = true
+    tableView.beginUpdates()
+    tableView.endUpdates()
     print(currentModel.parameterValue)
   }
   
@@ -250,13 +317,17 @@ extension ViewController: ICellDelegate {
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].currentDimension = currentModel.currentDimension
       inputModels[index].parameterValue = convertValues(model: currentModel)
+      inputModels[index].isExpanded = .notExpanded
       tableView.reloadData()
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].currentDimension = currentModel.currentDimension
       outputModels[index].parameterValue = convertValues(model: currentModel)
+      outputModels[index].isExpanded = .notExpanded
+
       tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
+    buttonClicked = false
   }
   
   func didInputTextField(_ cell: Cell) {

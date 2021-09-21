@@ -9,7 +9,6 @@
 import Foundation
 
 final class Dimensions {
-  
   let stressAndPressureArray = [
     StressAndPressure.MPa,
     StressAndPressure.Pa,

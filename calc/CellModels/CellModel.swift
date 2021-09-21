@@ -18,6 +18,7 @@ struct CellModel: Equatable {
   var avaliableDimensions: [CustomStringConvertible]
 	var parameterValue: String
   var parameterType: ParameterType
+  var isExpanded: Extensibility
 }
 
 
@@ -28,6 +29,10 @@ enum ParameterType {
     case output
 }
 
-
+enum Extensibility {
+    case didExpanded
+    case notExpanded
+    case notExpandable
+}
 
 

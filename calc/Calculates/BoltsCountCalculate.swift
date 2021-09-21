@@ -20,31 +20,36 @@ final class BoltsCountDataSource {
       currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "1000",
-      parameterType: ParameterType.input),
+      parameterType: ParameterType.input,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Меньший диаметер, D2",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "100",
-      parameterType: ParameterType.input),
+      parameterType: ParameterType.input,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Давление, P",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "100",
-      parameterType: ParameterType.input),
+      parameterType: ParameterType.input,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Диаметр срезного элемента, d",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "10",
-      parameterType: ParameterType.input),
+      parameterType: ParameterType.input,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Доп. напряжение на срез, [σ]τ",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "200",
-      parameterType: ParameterType.input),
+      parameterType: ParameterType.input,
+      isExpanded: .notExpanded),
 	]
 	lazy var outputModels = [
 		CellModel(
@@ -52,31 +57,36 @@ final class BoltsCountDataSource {
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-      parameterType: ParameterType.output),
+      parameterType: ParameterType.output,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Сечение крепежа, S2",
 			currentDimension: dimensions.diameterArray[0],
 			avaliableDimensions: dimensions.diameterArray,
 			parameterValue: "",
-      parameterType: ParameterType.output),
+      parameterType: ParameterType.output,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Сила от давления, F1",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-      parameterType: ParameterType.output),
+      parameterType: ParameterType.output,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Сила среза крепежа, F2",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-      parameterType: ParameterType.output),
+      parameterType: ParameterType.output,
+      isExpanded: .notExpanded),
 		CellModel(
 			parameterName: "Количество болтов, n",
 			currentDimension: dimensions.stressAndPressureArray[0],
 			avaliableDimensions: dimensions.stressAndPressureArray,
 			parameterValue: "",
-      parameterType: ParameterType.output),
+      parameterType: ParameterType.output,
+      isExpanded: .notExpandable),
 	]
 }
 
