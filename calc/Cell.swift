@@ -14,14 +14,11 @@ final class Cell: UITableViewCell {
   
 	var model: CellModel?
 	var delegate: ICellDelegate?
-  
-	var parameterLabel = LabelFactory.makeLabel()
+  var parameterLabel = LabelFactory.makeLabel()
 	var dimensionButton = ButtonFactory.makeButton()
 	var inputTextField = TexfFieldFactory.makeTextField()
   let picker = PickerFactory.makePicker()
-  
   var currentRowCounter = 0
-  
 	
 	// MARK: - Lifecycle
 
@@ -61,14 +58,12 @@ final class Cell: UITableViewCell {
 	}
 	
 	private func configureParameterLabel(_ label: UILabel) {
-    //label.backgroundColor = .cyan
     label.frame = CGRect.zero
     label.textAlignment = .left
     contentView.addSubview(label)
 	}
 	
 	func configureDimensionButton(_ button: UIButton) {
-    //button.backgroundColor = .cyan
     button.frame = CGRect.zero
     button.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
     contentView.addSubview(button)
@@ -103,9 +98,6 @@ final class Cell: UITableViewCell {
       parameterLabel.rightAnchor.constraint(
         equalTo: parameterLabel.leftAnchor,
         constant: 200),
-//      parameterLabel.bottomAnchor.constraint(
-//        equalTo: contentView.bottomAnchor,
-//        constant: -8),
       parameterLabel.leftAnchor.constraint(
         equalTo: contentView.leftAnchor,
         constant: 10),
@@ -115,8 +107,6 @@ final class Cell: UITableViewCell {
   func configureDimensionButtonConstraints() {
     dimensionButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-//      dimensionButton.heightAnchor.constraint(
-//        equalToConstant: 50),
       dimensionButton.topAnchor.constraint(
         equalTo: parameterLabel.topAnchor,
         constant: 0),
@@ -163,9 +153,6 @@ final class Cell: UITableViewCell {
       picker.rightAnchor.constraint(
         equalTo: contentView.rightAnchor,
         constant: -10),
-//      picker.bottomAnchor.constraint(
-//        equalTo: contentView.bottomAnchor,
-//        constant: -8),
       picker.leftAnchor.constraint(
         equalTo: contentView.leftAnchor,
         constant: 10)
@@ -176,7 +163,6 @@ final class Cell: UITableViewCell {
 
 	@objc
   func dimensionButtonAction(_: UIButton) {
-    ///как отключить кнопки во всех ячейках
     guard let unwrappedModel = model else { return }
     for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
       if dimensionButton.titleLabel?.text == unwrappedModel.avaliableDimensions[i].description {
@@ -190,9 +176,6 @@ final class Cell: UITableViewCell {
     model?.isExpanded = .didExpanded
     picker.reloadAllComponents()
     picker.isHidden = false
-
-    print ("BUTTON CLICKED")
-    
   }
 	
 	@objc
@@ -237,12 +220,11 @@ extension Cell: UIPickerViewDelegate {
     
   }
 }
-  
-  extension Cell: UITextFieldDelegate {
-    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
-        self.contentView.endEditing(true)
-        return true
-    }
-  
+
+extension Cell: UITextFieldDelegate {
+  func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+      self.contentView.endEditing(true)
+      return true
+  }
 }
 

@@ -32,7 +32,6 @@ extension Dimensions {
     }
   }
 
-
 extension Dimensions {
   enum Diameter: String, CustomStringConvertible {
     case mm = "мм"

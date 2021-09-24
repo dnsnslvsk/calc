@@ -25,6 +25,8 @@
 		36D2F048255C8CA200B49765 /* TextFieldFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F041255C8CA100B49765 /* TextFieldFactory.swift */; };
 		36D2F049255C8CA200B49765 /* LabelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F042255C8CA200B49765 /* LabelFactory.swift */; };
 		36D2F04A255C8CA200B49765 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2F043255C8CA200B49765 /* ViewController.swift */; };
+		84123B0526FD240500F388D5 /* DimensionValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84123B0426FD240500F388D5 /* DimensionValidator.swift */; };
+		84123B0726FD241200F388D5 /* DimensionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84123B0626FD241200F388D5 /* DimensionConverter.swift */; };
 		8422C4712599314100918939 /* ICellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8422C4702599314100918939 /* ICellDelegate.swift */; };
 		8422C4752599319000918939 /* IHistoryCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8422C4742599319000918939 /* IHistoryCellDelegate.swift */; };
 		8466B4CC2598CDF7005EA991 /* calcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8466B4CB2598CDF7005EA991 /* calcTests.swift */; };
@@ -61,6 +63,8 @@
 		36D2F041255C8CA100B49765 /* TextFieldFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldFactory.swift; sourceTree = "<group>"; };
 		36D2F042255C8CA200B49765 /* LabelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelFactory.swift; sourceTree = "<group>"; };
 		36D2F043255C8CA200B49765 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		84123B0426FD240500F388D5 /* DimensionValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionValidator.swift; sourceTree = "<group>"; };
+		84123B0626FD241200F388D5 /* DimensionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionConverter.swift; sourceTree = "<group>"; };
 		8422C4702599314100918939 /* ICellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICellDelegate.swift; sourceTree = "<group>"; };
 		8422C4742599319000918939 /* IHistoryCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IHistoryCellDelegate.swift; sourceTree = "<group>"; };
 		8466B4C92598CDF7005EA991 /* calcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,8 +115,9 @@
 				36D2F043255C8CA200B49765 /* ViewController.swift */,
 				2F4DD81B258258A90071573A /* HistoryTableViewController.swift */,
 				2FB2D6962571753E00032B34 /* Cell.swift */,
+				84123B0326FD23AE00F388D5 /* WorkWithDimensions */,
 				8422C48B259A38F100918939 /* Calculates */,
-				8422C485259A383D00918939 /* CellModels */,
+				8422C485259A383D00918939 /* Models */,
 				8422C488259A385800918939 /* Factories */,
 				8422C484259A380B00918939 /* Protocols */,
 				36D2F040255C8CA100B49765 /* AppDelegate.swift */,
@@ -125,6 +130,16 @@
 			path = calc;
 			sourceTree = "<group>";
 		};
+		84123B0326FD23AE00F388D5 /* WorkWithDimensions */ = {
+			isa = PBXGroup;
+			children = (
+				2F318582258FB03900363280 /* Dimensions.swift */,
+				84123B0426FD240500F388D5 /* DimensionValidator.swift */,
+				84123B0626FD241200F388D5 /* DimensionConverter.swift */,
+			);
+			path = WorkWithDimensions;
+			sourceTree = "<group>";
+		};
 		8422C484259A380B00918939 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,13 +149,13 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		8422C485259A383D00918939 /* CellModels */ = {
+		8422C485259A383D00918939 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				2F315DA82576C0020095C8BE /* CellModel.swift */,
 				2F318580258F8BCF00363280 /* HistoryCellModel.swift */,
 			);
-			path = CellModels;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		8422C488259A385800918939 /* Factories */ = {
@@ -158,7 +173,6 @@
 		8422C48B259A38F100918939 /* Calculates */ = {
 			isa = PBXGroup;
 			children = (
-				2F318582258FB03900363280 /* Dimensions.swift */,
 				2F4DD81D258270EC0071573A /* BoltsCountCalculate.swift */,
 			);
 			path = Calculates;
@@ -285,9 +299,11 @@
 				36D2F04A255C8CA200B49765 /* ViewController.swift in Sources */,
 				2FB2D6972571753E00032B34 /* Cell.swift in Sources */,
 				2FB2D6952571730700032B34 /* TableFactory.swift in Sources */,
+				84123B0526FD240500F388D5 /* DimensionValidator.swift in Sources */,
 				2F4DD81C258258A90071573A /* HistoryTableViewController.swift in Sources */,
 				8422C4712599314100918939 /* ICellDelegate.swift in Sources */,
 				8422C4752599319000918939 /* IHistoryCellDelegate.swift in Sources */,
+				84123B0726FD241200F388D5 /* DimensionConverter.swift in Sources */,
 				36D2F046255C8CA200B49765 /* PickerFactory.swift in Sources */,
 				2F4DD81E258270EC0071573A /* BoltsCountCalculate.swift in Sources */,
 				2F318583258FB03900363280 /* Dimensions.swift in Sources */,

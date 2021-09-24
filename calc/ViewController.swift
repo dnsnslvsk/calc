@@ -5,7 +5,6 @@
 //  Created by Nesiolovsky on 07.11.2020.
 //  Copyright © 2020 Nesiolovsky. All rights reserved.
 //
-//  
 
 import UIKit
 
@@ -15,18 +14,21 @@ class ViewController: UIViewController {
   
   var inputModels: [CellModel] = []
   var outputModels: [CellModel] = []
-  lazy var currentModel = inputModels[0]
+  
   var calculateResults: [HistoryCellModel] = []
+
+  lazy var currentModel = inputModels[0]
   var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
   var validatedDimension: Measurement<Dimension>?
   var convertedValue: Measurement<Dimension>?
+  
   var buttonClicked: Bool?
-  let tableView = TableFactory.makeTable()
-
   let selectedCellHeight: CGFloat = 166.0
   let unselectedCellHeight: CGFloat = 66.0
   
-  
+  let tableView = TableFactory.makeTable()
+  let dimensionValidator = DimensionValidator()
+  let dimensionConverter = DimensionConverter()
   
   // MARK: - Lifecycle
   
@@ -38,13 +40,7 @@ class ViewController: UIViewController {
     configure()
   }
   
-//  override func viewWillAppear(_ animated: Bool) {
-//    tableView.estimatedRowHeight = 300
-//    tableView.rowHeight = UITableView.automaticDimension
-//  }
-  
   // MARK: - Internal methods
-  
   
   private func didCalculate() {
     var inputValues: [Double] = []
@@ -53,7 +49,6 @@ class ViewController: UIViewController {
       inputValues.append(doubleValue)
     }
     let calculationCore = BoltsCountCalculationCore(inputValues: inputValues)
-    
     let result = calculationCore.getFormattedResult()
     for item in 0...outputModels.count - 1 {
       outputModels[item].parameterValue = result[item]
@@ -61,80 +56,7 @@ class ViewController: UIViewController {
     tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     calculateResults.append(calculationCore.getResultForHistory())
   }
-  
-  func didValidateDimension(model: CellModel) {
-    guard let unwrappedValue = Double(model.parameterValue) else { return }
-      switch model.currentDimension.description {
-      case "МПа":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.megapascals)
-      case "Па":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.newtonsPerMetersSquared)
-      case "psi":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.poundsForcePerSquareInch)
-      case "атм":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitPressure.bars)
-      case "мм":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.millimeters)
-      case "дюйм":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.inches)
-      case "м":
-        validatedDimension = Measurement(value: unwrappedValue, unit: UnitLength.meters)
-      default:
-        return
-      }
-  }
-  
-  func convertValues(model: CellModel) -> String {
-    let model = currentModel
-    guard let unwrappedValidatedDimension = validatedDimension else { return "" }
-    switch unwrappedValidatedDimension.unit {
-    case is UnitPressure:
-      switch model.currentDimension.description {
-      case "МПа":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.megapascals)
-      case "Па":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.newtonsPerMetersSquared)
-      case "psi":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.poundsForcePerSquareInch)
-      case "атм":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitPressure.bars)
-      default:
-        return ""
-      }
-    case is UnitLength:
-      switch model.currentDimension.description {
-      case "мм":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.millimeters)
-      case "дюйм":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.inches)
-      case "м":
-        convertedValue = unwrappedValidatedDimension.converted(to: UnitLength.meters)
-      default:
-        return ""
-      }
-    default:
-      return ""
-    }
-//    let formatter = MeasurementFormatter()
-//    formatter.unitStyle = .short
-//    formatter.unitOptions = .providedUnit
-//    formatter.locale = .current
-//    if validatedDimensionPressure == Measurement(value: 0, unit: UnitPressure.gigapascals) {
-//      print(round(1000*convertedValueLength.value)/1000, convertedValueLength.unit)
-//      let result = formatter.string(from: convertedValueLength)
-//      let formattedResult = String(result.filter { "01234567890.".contains($0) })
-//      print(formattedResult)
-//      return formattedResult
-//    } else {
-//      print(convertedValuePressure)
-//      let result = formatter.string(from: convertedValuePressure)
-//      let formattedResult = String(result.filter { "01234567890.".contains($0) })
-//      return formattedResult
-//    }
-    guard let unwrappedConvertedValue = convertedValue?.value else { return "" }
-    let result = String(round(100*unwrappedConvertedValue)/100)
-    return result
-  }
+
   
   // MARK: - Configure
   
@@ -163,8 +85,6 @@ class ViewController: UIViewController {
     table.frame = view.bounds
     tableView.delegate = self
     tableView.dataSource = self
-
-    
     table.register(Cell.self, forCellReuseIdentifier: "cell")
     view.addSubview(table)
   }
@@ -184,18 +104,6 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    if selectedCellIndexPath != nil && selectedCellIndexPath! as IndexPath == indexPath {
-//        selectedCellIndexPath = nil
-//    } else {
-//        selectedCellIndexPath! as IndexPath = indexPath
-//    }
-//
-//    tableView.beginUpdates()
-//    tableView.endUpdates()
-//
-//    if selectedCellIndexPath != nil {
-//      tableView.scrollToRow(at: indexPath, at: .none, animated: true)
-//    }
   }
 }
 
@@ -217,7 +125,6 @@ extension ViewController: UITableViewDataSource {
       return 0
     }
   }
-  
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! Cell
@@ -244,12 +151,6 @@ extension ViewController: UITableViewDataSource {
     
   }
   
-//  func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//    self.tableView.estimatedRowHeight = 80 // or any other number that makes sense for your cells
-//    self.tableView.rowHeight = UITableView.automaticDimension
-//    return UITableView.automaticDimension
-//  }
-  
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.section {
     case 0:
@@ -275,12 +176,7 @@ extension ViewController: UITableViewDataSource {
     default:
       return 0
     }
-    
-//    if selectedCellIndexPath! as IndexPath == indexPath {
-//        return selectedCellHeight
-//    }
-//    return unselectedCellHeight
-      }
+  }
 }
 
 // MARK: - ICellDelegate
@@ -295,12 +191,12 @@ extension ViewController: ICellDelegate {
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].parameterValue = currentModel.parameterValue
       inputModels[index].isExpanded = .didExpanded
-      didValidateDimension(model: currentModel)
+      validatedDimension = dimensionValidator.didValidateDimension(model: currentModel)
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].parameterValue = currentModel.parameterValue
       outputModels[index].isExpanded = .didExpanded
-      didValidateDimension(model: currentModel)
+      validatedDimension = dimensionValidator.didValidateDimension(model: currentModel)
     }
     print ("row selected")
     buttonClicked = true
@@ -316,15 +212,14 @@ extension ViewController: ICellDelegate {
     case .input:
       guard let index = inputModels.firstIndex(of: currentModel) else { return }
       inputModels[index].currentDimension = currentModel.currentDimension
-      inputModels[index].parameterValue = convertValues(model: currentModel)
+      inputModels[index].parameterValue = dimensionConverter.convertValues(model: currentModel, validatedDimension: validatedDimension)
       inputModels[index].isExpanded = .notExpanded
       tableView.reloadData()
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].currentDimension = currentModel.currentDimension
-      outputModels[index].parameterValue = convertValues(model: currentModel)
+      outputModels[index].parameterValue = dimensionConverter.convertValues(model: currentModel, validatedDimension: validatedDimension)
       outputModels[index].isExpanded = .notExpanded
-
       tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     }
     buttonClicked = false

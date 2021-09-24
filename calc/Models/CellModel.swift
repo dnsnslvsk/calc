@@ -21,9 +21,6 @@ struct CellModel: Equatable {
   var isExpanded: Extensibility
 }
 
-
-
-
 enum ParameterType {
     case input
     case output

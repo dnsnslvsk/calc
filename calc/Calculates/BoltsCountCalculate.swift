@@ -116,7 +116,6 @@ final class BoltsCountCalculationCore {
 		F1 = round(S1 * P)
 		F2 = round(στ * S2)
 		n = round(F1/F2)
-    
 		return [S1, S2, F1, F2, n]
 	}
 	
@@ -161,6 +160,8 @@ final class BoltsCountCalculationCore {
 		self.στ = inputValues[4]
 	}
 }
+
+
 
 extension BoltsCountCalculationCore {
 	
