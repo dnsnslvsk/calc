@@ -19,6 +19,7 @@ final class Cell: UITableViewCell {
 	var inputTextField = TexfFieldFactory.makeTextField()
   let picker = PickerFactory.makePicker()
   var currentRowCounter = 0
+  var indexPath: Int = 0
 	
 	// MARK: - Lifecycle
 
@@ -70,7 +71,6 @@ final class Cell: UITableViewCell {
 	}
 	
 	private func configureInputTextField(_ textField: UITextField) {
-    //textField.backgroundColor = .cyan
     textField.frame = CGRect.zero
     textField.keyboardType = .default
     textField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
@@ -81,7 +81,6 @@ final class Cell: UITableViewCell {
     picker.delegate = self
     picker.dataSource = self
     picker.isHidden = false
-    //picker.backgroundColor = .brown
     contentView.addSubview(picker)
   }
   
@@ -176,6 +175,7 @@ final class Cell: UITableViewCell {
     model?.isExpanded = .didExpanded
     picker.reloadAllComponents()
     picker.isHidden = false
+    print(indexPath)
   }
 	
 	@objc
@@ -206,6 +206,7 @@ extension Cell: UIPickerViewDelegate {
   
   func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     guard let unwrappedModel = model else { return "" }
+    print(unwrappedModel)
     return unwrappedModel.avaliableDimensions[row].description
   }
   

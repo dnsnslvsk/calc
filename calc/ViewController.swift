@@ -130,6 +130,7 @@ extension ViewController: UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! Cell
     cell.delegate = self
     cell.picker.isHidden = true
+    cell.indexPath = indexPath.row
     switch indexPath.section {
     case 0:
       let model = inputModels[indexPath.row]
@@ -148,7 +149,6 @@ extension ViewController: UITableViewDataSource {
     default:
       return cell
     }
-    
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -195,10 +195,11 @@ extension ViewController: ICellDelegate {
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].parameterValue = currentModel.parameterValue
-      outputModels[index].isExpanded = .didExpanded
+      if outputModels[index].isExpanded == .notExpandable { } else {
+        outputModels[index].isExpanded = .didExpanded
+      }
       validatedDimension = dimensionValidator.didValidateDimension(model: currentModel)
     }
-    print ("row selected")
     buttonClicked = true
     tableView.beginUpdates()
     tableView.endUpdates()
@@ -214,13 +215,17 @@ extension ViewController: ICellDelegate {
       inputModels[index].currentDimension = currentModel.currentDimension
       inputModels[index].parameterValue = dimensionConverter.convertValues(model: currentModel, validatedDimension: validatedDimension)
       inputModels[index].isExpanded = .notExpanded
-      tableView.reloadData()
+      let indexPath = IndexPath(row: cell.indexPath, section: 0)
+      tableView.reloadRows(at: [indexPath], with: .fade)
+      //tableView.reloadData()
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].currentDimension = currentModel.currentDimension
       outputModels[index].parameterValue = dimensionConverter.convertValues(model: currentModel, validatedDimension: validatedDimension)
       outputModels[index].isExpanded = .notExpanded
-      tableView.reloadSections(IndexSet(integer: 1), with: .fade)
+      let indexPath = IndexPath(row: cell.indexPath, section: 1)
+      tableView.reloadRows(at: [indexPath], with: .fade)
+      //tableView.reloadSections(IndexSet(integer: 1), with: .none)
     }
     buttonClicked = false
   }
