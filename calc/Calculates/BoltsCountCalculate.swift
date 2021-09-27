@@ -9,137 +9,137 @@
 import Foundation
 
 final class BoltsCountDataSource {
-	
-	// MARK: - Internal properties
-
-	let dimensions = Dimensions()
   
-	lazy var inputModels = [
-		CellModel(
-			parameterName: "Больший диаметр, D1",
+  // MARK: - Internal properties
+  
+  let dimensions = Dimensions()
+  
+  lazy var inputModels = [
+    CellModel(
+      parameterName: "Больший диаметр, D1",
       currentDimension: dimensions.diameterArray[0],
-			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "1000",
+      avaliableDimensions: dimensions.diameterArray,
+      parameterValue: "1000",
       parameterType: ParameterType.input,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Меньший диаметер, D2",
-			currentDimension: dimensions.diameterArray[0],
-			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "100",
+    CellModel(
+      parameterName: "Меньший диаметер, D2",
+      currentDimension: dimensions.diameterArray[0],
+      avaliableDimensions: dimensions.diameterArray,
+      parameterValue: "100",
       parameterType: ParameterType.input,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Давление, P",
-			currentDimension: dimensions.stressAndPressureArray[0],
-			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "100",
+    CellModel(
+      parameterName: "Давление, P",
+      currentDimension: dimensions.stressAndPressureArray[0],
+      avaliableDimensions: dimensions.stressAndPressureArray,
+      parameterValue: "100",
       parameterType: ParameterType.input,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Диаметр срезного элемента, d",
-			currentDimension: dimensions.diameterArray[0],
-			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "10",
+    CellModel(
+      parameterName: "Диаметр срезного элемента, d",
+      currentDimension: dimensions.diameterArray[0],
+      avaliableDimensions: dimensions.diameterArray,
+      parameterValue: "10",
       parameterType: ParameterType.input,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Доп. напряжение на срез, [σ]τ",
-			currentDimension: dimensions.stressAndPressureArray[0],
-			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "200",
+    CellModel(
+      parameterName: "Доп. напряжение на срез, [σ]τ",
+      currentDimension: dimensions.stressAndPressureArray[0],
+      avaliableDimensions: dimensions.stressAndPressureArray,
+      parameterValue: "200",
       parameterType: ParameterType.input,
       isExpanded: .notExpanded),
-	]
-	lazy var outputModels = [
-		CellModel(
-			parameterName: "Площадь под давлением, S1",
-			currentDimension: dimensions.diameterArray[0],
-			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "",
+  ]
+  lazy var outputModels = [
+    CellModel(
+      parameterName: "Площадь под давлением, S1",
+      currentDimension: dimensions.diameterArray[0],
+      avaliableDimensions: dimensions.diameterArray,
+      parameterValue: "",
       parameterType: ParameterType.output,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Сечение крепежа, S2",
-			currentDimension: dimensions.diameterArray[0],
-			avaliableDimensions: dimensions.diameterArray,
-			parameterValue: "",
+    CellModel(
+      parameterName: "Сечение крепежа, S2",
+      currentDimension: dimensions.diameterArray[0],
+      avaliableDimensions: dimensions.diameterArray,
+      parameterValue: "",
       parameterType: ParameterType.output,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Сила от давления, F1",
-			currentDimension: dimensions.stressAndPressureArray[0],
-			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "",
+    CellModel(
+      parameterName: "Сила от давления, F1",
+      currentDimension: dimensions.stressAndPressureArray[0],
+      avaliableDimensions: dimensions.stressAndPressureArray,
+      parameterValue: "",
       parameterType: ParameterType.output,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Сила среза крепежа, F2",
-			currentDimension: dimensions.stressAndPressureArray[0],
-			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "",
+    CellModel(
+      parameterName: "Сила среза крепежа, F2",
+      currentDimension: dimensions.stressAndPressureArray[0],
+      avaliableDimensions: dimensions.stressAndPressureArray,
+      parameterValue: "",
       parameterType: ParameterType.output,
       isExpanded: .notExpanded),
-		CellModel(
-			parameterName: "Количество болтов, n",
-			currentDimension: dimensions.stressAndPressureArray[0],
-			avaliableDimensions: dimensions.stressAndPressureArray,
-			parameterValue: "",
+    CellModel(
+      parameterName: "Количество болтов, n",
+      currentDimension: dimensions.stressAndPressureArray[0],
+      avaliableDimensions: dimensions.stressAndPressureArray,
+      parameterValue: "",
       parameterType: ParameterType.output,
       isExpanded: .notExpandable),
-	]
+  ]
 }
 
 final class BoltsCountCalculationCore {
-	
-	// MARK: - Private properties
-
-	private let D1: Double
-	private let D2: Double
-	private let P: Double
-	private let d: Double
-	private let στ: Double
-	private var result: [String] = []
   
-	private var S1: Double = 0
-	private var S2: Double = 0
-	private var F1: Double = 0
-	private var F2: Double = 0
-	private var n: Double = 0
-	private var resultForHistory: [String] = []
-	
-	// MARK: - Internal methods
+  // MARK: - Private properties
   
-	func getFormattedResult() -> [String] {
-		for item in calculate() {
-			result.append("\(item)")
-		}
-		return result
-	}
-	
-	func getResultForHistory() -> HistoryCellModel {
-		resultForHistory = getFormattedResult()
-		let historyModel = HistoryCellModel(
-			formattedResult:
-			"""
-			ИСХОДНЫЕ ДАННЫЕ:
-			Больший диаметр, D1 = \(D1) мм
-			Меньший диаметр, D2 =  \(D2) мм
-			Давление, P =  \(P) МПа
-			Диаметр срезного элемента, d =  \(d) мм
-			Доп. напряжение на срез, [σ]τ =  \(στ) МПа
-			
-			РЕЗУЛЬТАТ:
-			Площадь под давлением, S1 =  \(S1) мм²
-			Сечение крепежа, S2 =  \(S2) мм²
-			Сила от давления, F1 =  \(F1) Н
-			Сила среза крепежа, F2 =  \(F2) Н
-			Количество болтов, n =  \(n) шт.
-			""",
-			inputValues: ["\(D1)", "\(D2)", "\(P)", "\(d)", "\(στ)"],
-			outputValues: ["\(S1)", "\(S2)", "\(F1)", "\(F2)", "\(n)"])
-		return historyModel
-	}
+  private let D1: Double
+  private let D2: Double
+  private let P: Double
+  private let d: Double
+  private let στ: Double
+  private var result: [String] = []
+  
+  private var S1: Double = 0
+  private var S2: Double = 0
+  private var F1: Double = 0
+  private var F2: Double = 0
+  private var n: Double = 0
+  private var resultForHistory: [String] = []
+  
+  // MARK: - Internal methods
+  
+  func getFormattedResult() -> [String] {
+    for item in calculate() {
+      result.append("\(item)")
+    }
+    return result
+  }
+  
+  func getResultForHistory() -> HistoryCellModel {
+    resultForHistory = getFormattedResult()
+    let historyModel = HistoryCellModel(
+      formattedResult:
+        """
+      ИСХОДНЫЕ ДАННЫЕ:
+      Больший диаметр, D1 = \(D1) мм
+      Меньший диаметр, D2 =  \(D2) мм
+      Давление, P =  \(P) МПа
+      Диаметр срезного элемента, d =  \(d) мм
+      Доп. напряжение на срез, [σ]τ =  \(στ) МПа
+      
+      РЕЗУЛЬТАТ:
+      Площадь под давлением, S1 =  \(S1) мм²
+      Сечение крепежа, S2 =  \(S2) мм²
+      Сила от давления, F1 =  \(F1) Н
+      Сила среза крепежа, F2 =  \(F2) Н
+      Количество болтов, n =  \(n) шт.
+      """,
+      inputValues: ["\(D1)", "\(D2)", "\(P)", "\(d)", "\(στ)"],
+      outputValues: ["\(S1)", "\(S2)", "\(F1)", "\(F2)", "\(n)"])
+    return historyModel
+  }
   
   // MARK: - Private methods
   
@@ -151,26 +151,26 @@ final class BoltsCountCalculationCore {
     n = round(F1/F2)
     return [S1, S2, F1, F2, n]
   }
-	
-	// MARK: - Initialization
-
-	internal init(inputValues: [Double]) {
+  
+  // MARK: - Initialization
+  
+  internal init(inputValues: [Double]) {
     self.D1 = inputValues[0]
-		self.D2 = inputValues[1]
-		self.P = inputValues[2]
-		self.d = inputValues[3]
-		self.στ = inputValues[4]
-	}
+    self.D2 = inputValues[1]
+    self.P = inputValues[2]
+    self.d = inputValues[3]
+    self.στ = inputValues[4]
+  }
 }
 
 extension BoltsCountCalculationCore {
-	
-	enum Parameters: Double, CaseIterable {
+  
+  enum Parameters: Double, CaseIterable {
     case D1
-		case D2
-		case P
-		case d
-		case στ
-	}
+    case D2
+    case P
+    case d
+    case στ
+  }
 }
 

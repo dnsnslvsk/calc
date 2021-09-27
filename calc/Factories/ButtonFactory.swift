@@ -9,10 +9,10 @@
 import UIKit
 
 final class ButtonFactory {
-	
-	static func makeButton() -> UIButton {
-		let button = UIButton()
-		button.setTitleColor(.label, for: .normal)
-		return button
-	}
+  
+  static func makeButton() -> UIButton {
+    let button = UIButton()
+    button.setTitleColor(.label, for: .normal)
+    return button
+  }
 }

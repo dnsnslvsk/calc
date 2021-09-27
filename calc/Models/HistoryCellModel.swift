@@ -9,7 +9,7 @@
 import Foundation
 
 struct HistoryCellModel {
-	var formattedResult: String
-	var inputValues: [String]
-	var outputValues: [String]
+  var formattedResult: String
+  var inputValues: [String]
+  var outputValues: [String]
 }

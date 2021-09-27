@@ -9,27 +9,27 @@
 import Foundation
 
 struct CellModel: Equatable {
-	static func == (lhs: CellModel, rhs: CellModel) -> Bool {
-		return rhs.id == lhs.id
-	}
-	let id = UUID()
-	var parameterName: String
+  static func == (lhs: CellModel, rhs: CellModel) -> Bool {
+    return rhs.id == lhs.id
+  }
+  let id = UUID()
+  var parameterName: String
   var currentDimension: CustomStringConvertible
   var avaliableDimensions: [CustomStringConvertible]
-	var parameterValue: String
+  var parameterValue: String
   var parameterType: ParameterType
   var isExpanded: Extensibility
 }
 
 enum ParameterType {
-    case input
-    case output
+  case input
+  case output
 }
 
 enum Extensibility {
-    case didExpanded
-    case notExpanded
-    case notExpandable
+  case didExpanded
+  case notExpanded
+  case notExpandable
 }
 
 

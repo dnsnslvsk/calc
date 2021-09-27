@@ -9,11 +9,11 @@
 import UIKit
 
 final class Cell: UITableViewCell {
-	
-	// MARK: - Internal properties
   
-	var model: CellModel?
-	var delegate: ICellDelegate?
+  // MARK: - Internal properties
+  
+  var model: CellModel?
+  var delegate: ICellDelegate?
   let picker = PickerFactory.makePicker()
   var indexPath: Int = 0
   
@@ -23,62 +23,62 @@ final class Cell: UITableViewCell {
   private var dimensionButton = ButtonFactory.makeButton()
   private var inputTextField = TexfFieldFactory.makeTextField()
   private var currentRowCounter = 0
-	
-	// MARK: - Lifecycle
-
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+  
+  // MARK: - Lifecycle
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     configure()
     inputTextField.delegate = self
-	}
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: - Internal methods
-	
-	func setNameParameterLabel(_ name: String?) {
-		parameterLabel.text = name
-	}
-	func setNameDimensionButton(_ name: String?) {
-		dimensionButton.setTitle(name, for: .normal)
-	}
-	func setValue(_ value: String?) {
-		inputTextField.text = value
-	}
-	
-	// MARK: - Configure
-	
-	private func configure() {
-		configureParameterLabel(parameterLabel)
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  // MARK: - Internal methods
+  
+  func setNameParameterLabel(_ name: String?) {
+    parameterLabel.text = name
+  }
+  func setNameDimensionButton(_ name: String?) {
+    dimensionButton.setTitle(name, for: .normal)
+  }
+  func setValue(_ value: String?) {
+    inputTextField.text = value
+  }
+  
+  // MARK: - Configure
+  
+  private func configure() {
+    configureParameterLabel(parameterLabel)
     configureParameterLabelConstraints()
-		configureDimensionButton(dimensionButton)
+    configureDimensionButton(dimensionButton)
     configureDimensionButtonConstraints()
-		configureInputTextField(inputTextField)
+    configureInputTextField(inputTextField)
     configureInputTextFieldConstraints()
     configurePicker(picker)
     configurePickerConstraints()
-	}
-	
-	private func configureParameterLabel(_ label: UILabel) {
+  }
+  
+  private func configureParameterLabel(_ label: UILabel) {
     label.frame = CGRect.zero
     label.textAlignment = .left
     contentView.addSubview(label)
-	}
-	
-	private func configureDimensionButton(_ button: UIButton) {
+  }
+  
+  private func configureDimensionButton(_ button: UIButton) {
     button.frame = CGRect.zero
     button.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
     contentView.addSubview(button)
-	}
-	
-	private func configureInputTextField(_ textField: UITextField) {
+  }
+  
+  private func configureInputTextField(_ textField: UITextField) {
     textField.frame = CGRect.zero
     textField.keyboardType = .default
     textField.addTarget(self, action: #selector(inputTextFieldAction(_ :)), for: .editingDidEnd)
     contentView.addSubview(textField)
-	}
+  }
   
   private func configurePicker(_ picker: UIPickerView) {
     picker.delegate = self
@@ -159,9 +159,9 @@ final class Cell: UITableViewCell {
     ])
   }
   
-  	// MARK: - Actions
-
-	@objc
+  // MARK: - Actions
+  
+  @objc
   private func dimensionButtonAction(_: UIButton) {
     guard let unwrappedModel = model else { return }
     for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
@@ -178,13 +178,13 @@ final class Cell: UITableViewCell {
     picker.isHidden = false
     print(indexPath)
   }
-	
-	@objc
-	private func inputTextFieldAction(_: UITextField) {
-		guard let value = inputTextField.text else { return }
+  
+  @objc
+  private func inputTextFieldAction(_: UITextField) {
+    guard let value = inputTextField.text else { return }
     model?.parameterValue = value
-		delegate?.didInputTextField(self)
-	}
+    delegate?.didInputTextField(self)
+  }
 }
 
 // MARK: - UIPickerViewDelegate
@@ -225,8 +225,7 @@ extension Cell: UIPickerViewDelegate {
 
 extension Cell: UITextFieldDelegate {
   func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
-      self.contentView.endEditing(true)
-      return true
+    self.contentView.endEditing(true)
+    return true
   }
 }
-

@@ -33,8 +33,8 @@ extension Dimensions {
     case psi = "psi"
     case bar = "атм"
     var description: String { rawValue }
-    }
   }
+}
 
 extension Dimensions {
   enum Diameter: String, CustomStringConvertible {
@@ -42,8 +42,5 @@ extension Dimensions {
     case inch = "дюйм"
     case m = "м"
     var description: String { rawValue }
-    }
   }
-
-
-
+}

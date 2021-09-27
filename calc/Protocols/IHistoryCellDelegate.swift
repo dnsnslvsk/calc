@@ -7,5 +7,5 @@
 //
 
 protocol IHistoryCellDelegate {
-    func didSelectHistoryCell(_ historyCell: HistoryCellModel)
+  func didSelectHistoryCell(_ historyCell: HistoryCellModel)
 }

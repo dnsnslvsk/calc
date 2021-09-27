@@ -58,7 +58,7 @@ final class ViewController: UIViewController {
     tableView.reloadSections(IndexSet(integer: 1), with: .fade)
     calculateResults.append(calculationCore.getResultForHistory())
   }
-
+  
   
   // MARK: - Configure
   
@@ -101,7 +101,7 @@ final class ViewController: UIViewController {
     self.present(vc, animated: true, completion: nil)
   }
 }
- 
+
 // MARK: - UITableViewDelegate
 
 extension ViewController: UITableViewDelegate {
@@ -219,7 +219,7 @@ extension ViewController: ICellDelegate {
       inputModels[index].isExpanded = .notExpanded
       let indexPath = IndexPath(row: cell.indexPath, section: 0)
       tableView.reloadRows(at: [indexPath], with: .fade)
-      //tableView.reloadData()
+    //tableView.reloadData()
     case .output:
       guard let index = outputModels.firstIndex(of: currentModel) else { return }
       outputModels[index].currentDimension = currentModel.currentDimension
@@ -227,7 +227,7 @@ extension ViewController: ICellDelegate {
       outputModels[index].isExpanded = .notExpanded
       let indexPath = IndexPath(row: cell.indexPath, section: 1)
       tableView.reloadRows(at: [indexPath], with: .fade)
-      //tableView.reloadSections(IndexSet(integer: 1), with: .none)
+    //tableView.reloadSections(IndexSet(integer: 1), with: .none)
     }
     buttonClicked = false
   }
@@ -254,6 +254,3 @@ extension ViewController: IHistoryCellDelegate {
     tableView.reloadData()
   }
 }
-
-
-
