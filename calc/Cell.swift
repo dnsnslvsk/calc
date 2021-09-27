@@ -207,7 +207,7 @@ extension Cell: UIPickerViewDelegate {
   
   func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     guard let unwrappedModel = model else { return "" }
-    print(unwrappedModel.avaliableDimensions[row]) ///препаред тy реюз проверить - очистить все что связано с пикером в частности делегат
+    print(unwrappedModel.avaliableDimensions[row])
     return unwrappedModel.avaliableDimensions[row].description
   }
   
