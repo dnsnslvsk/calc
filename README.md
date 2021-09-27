@@ -12,3 +12,5 @@
   
 # UML диаграмма классов:
 https://miro.com/app/board/o9J_lu_xGdE=/
+
+![Calc UML диаграмма классов](https://user-images.githubusercontent.com/91462713/134884024-98a251d4-d0c2-4a8a-890b-97bb66670efc.png)
