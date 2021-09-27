@@ -14,12 +14,15 @@ final class Cell: UITableViewCell {
   
 	var model: CellModel?
 	var delegate: ICellDelegate?
-  var parameterLabel = LabelFactory.makeLabel()
-	var dimensionButton = ButtonFactory.makeButton()
-	var inputTextField = TexfFieldFactory.makeTextField()
   let picker = PickerFactory.makePicker()
-  var currentRowCounter = 0
   var indexPath: Int = 0
+  
+  // MARK: - Private properties
+  
+  private var parameterLabel = LabelFactory.makeLabel()
+  private var dimensionButton = ButtonFactory.makeButton()
+  private var inputTextField = TexfFieldFactory.makeTextField()
+  private var currentRowCounter = 0
 	
 	// MARK: - Lifecycle
 
@@ -64,7 +67,7 @@ final class Cell: UITableViewCell {
     contentView.addSubview(label)
 	}
 	
-	func configureDimensionButton(_ button: UIButton) {
+	private func configureDimensionButton(_ button: UIButton) {
     button.frame = CGRect.zero
     button.addTarget(self, action: #selector(dimensionButtonAction(_ :)), for: .touchUpInside)
     contentView.addSubview(button)
@@ -84,7 +87,7 @@ final class Cell: UITableViewCell {
     contentView.addSubview(picker)
   }
   
-  // MARK: - Constraints
+  // MARK: - Configure constraints
   
   private func configureParameterLabelConstraints() {
     parameterLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -103,7 +106,7 @@ final class Cell: UITableViewCell {
     ])
   }
   
-  func configureDimensionButtonConstraints() {
+  private func configureDimensionButtonConstraints() {
     dimensionButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       dimensionButton.topAnchor.constraint(
@@ -121,11 +124,9 @@ final class Cell: UITableViewCell {
     ])
   }
   
-  func configureInputTextFieldConstraints() {
+  private func configureInputTextFieldConstraints() {
     inputTextField.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-//      inputTextField.heightAnchor.constraint(
-//        equalToConstant: 50),
       inputTextField.topAnchor.constraint(
         equalTo: parameterLabel.topAnchor,
         constant: 0),
@@ -141,7 +142,7 @@ final class Cell: UITableViewCell {
     ])
   }
   
-  func configurePickerConstraints() {
+  private func configurePickerConstraints() {
     picker.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       picker.heightAnchor.constraint(
@@ -161,7 +162,7 @@ final class Cell: UITableViewCell {
   	// MARK: - Actions
 
 	@objc
-  func dimensionButtonAction(_: UIButton) {
+  private func dimensionButtonAction(_: UIButton) {
     guard let unwrappedModel = model else { return }
     for i in 0...unwrappedModel.avaliableDimensions.count - 1 {
       if dimensionButton.titleLabel?.text == unwrappedModel.avaliableDimensions[i].description {
@@ -206,7 +207,7 @@ extension Cell: UIPickerViewDelegate {
   
   func pickerView(_ picker: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     guard let unwrappedModel = model else { return "" }
-    print(unwrappedModel)
+    print(unwrappedModel.avaliableDimensions[row]) ///препаред тy реюз проверить - очистить все что связано с пикером в частности делегат
     return unwrappedModel.avaliableDimensions[row].description
   }
   

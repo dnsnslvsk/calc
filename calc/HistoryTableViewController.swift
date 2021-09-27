@@ -8,13 +8,16 @@
 
 import UIKit
 
-class HistoryTableViewController: UITableViewController {
+final class HistoryTableViewController: UITableViewController {
 	
 	// MARK: - Internal properties
 	
 	var delegate: IHistoryCellDelegate?
 	var models: [HistoryCellModel] = []
-	var model = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
+  
+  // MARK: - Private properties
+  
+	private var model = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
 	
 	// MARK: - Lifecycle
 	

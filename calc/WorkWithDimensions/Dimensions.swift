@@ -9,12 +9,16 @@
 import Foundation
 
 final class Dimensions {
+  
+  // MARK: - Internal properties
+  
   let stressAndPressureArray = [
     StressAndPressure.MPa,
     StressAndPressure.Pa,
     StressAndPressure.psi,
     StressAndPressure.bar
   ]
+  
   let diameterArray = [
     Diameter.mm,
     Diameter.inch,

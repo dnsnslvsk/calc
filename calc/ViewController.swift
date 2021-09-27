@@ -8,39 +8,41 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
   
-  // MARK: - Internal properties
+  // MARK: - Dependensies
   
-  var inputModels: [CellModel] = []
-  var outputModels: [CellModel] = []
+  private let dimensionValidator = DimensionValidator()
+  private let dimensionConverter = DimensionConverter()
   
-  var calculateResults: [HistoryCellModel] = []
-
-  lazy var currentModel = inputModels[0]
-  var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
-  var validatedDimension: Measurement<Dimension>?
-  var convertedValue: Measurement<Dimension>?
+  // MARK: - Private properties
   
-  var buttonClicked: Bool?
-  let selectedCellHeight: CGFloat = 166.0
-  let unselectedCellHeight: CGFloat = 66.0
+  private let boltsCountDataSource = BoltsCountDataSource()
+  private var inputModels: [CellModel] = []
+  private var outputModels: [CellModel] = []
+  private var calculateResults: [HistoryCellModel] = []
+  private lazy var currentModel = inputModels[0]
+  private var currentHistoryModel = HistoryCellModel(formattedResult: "", inputValues: [], outputValues: [])
+  private var validatedDimension: Measurement<Dimension>?
+  private var convertedValue: Measurement<Dimension>?
+  private var buttonClicked: Bool?
+  private let tableView = TableFactory.makeTable()
   
-  let tableView = TableFactory.makeTable()
-  let dimensionValidator = DimensionValidator()
-  let dimensionConverter = DimensionConverter()
+  // MARK: - Constants
+  
+  private let selectedCellHeight: CGFloat = 166.0
+  private let unselectedCellHeight: CGFloat = 66.0
   
   // MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    let calculate = BoltsCountDataSource()
-    inputModels = calculate.inputModels
-    outputModels = calculate.outputModels
+    inputModels = boltsCountDataSource.inputModels
+    outputModels = boltsCountDataSource.outputModels
     configure()
   }
   
-  // MARK: - Internal methods
+  // MARK: - Private methods
   
   private func didCalculate() {
     var inputValues: [Double] = []
@@ -60,7 +62,7 @@ class ViewController: UIViewController {
   
   // MARK: - Configure
   
-  func configure() {
+  private func configure() {
     configureTitle()
     configureLeftBarButton()
     configureRightBarButton()

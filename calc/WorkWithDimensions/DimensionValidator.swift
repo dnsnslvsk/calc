@@ -10,6 +10,8 @@ import Foundation
 
 final class DimensionValidator {
   
+  // MARK: - Internal methods
+  
   func didValidateDimension(model: CellModel) -> Measurement<Dimension>? {
     guard let unwrappedValue = Double(model.parameterValue) else { return nil }
     var validatedDimension: Measurement<Dimension>?

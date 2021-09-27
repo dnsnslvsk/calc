@@ -10,6 +10,8 @@ import Foundation
 
 final class DimensionConverter {
   
+  // MARK: - Internal methods
+  
   func convertValues(model: CellModel, validatedDimension: Measurement<Dimension>?) -> String {
     guard let unwrappedValidatedDimension = validatedDimension else { return "" }
     var convertedValue: Measurement<Dimension>?

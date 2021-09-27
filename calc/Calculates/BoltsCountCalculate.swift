@@ -92,33 +92,24 @@ final class BoltsCountDataSource {
 
 final class BoltsCountCalculationCore {
 	
-	// MARK: - Internal properties
+	// MARK: - Private properties
 
-	let D1: Double
-	let D2: Double
-	let P: Double
-	let d: Double
-	let στ: Double
-	var result: [String] = []
+	private let D1: Double
+	private let D2: Double
+	private let P: Double
+	private let d: Double
+	private let στ: Double
+	private var result: [String] = []
   
-	var S1: Double = 0
-	var S2: Double = 0
-	var F1: Double = 0
-	var F2: Double = 0
-	var n: Double = 0
-	var resultForHistory: [String] = []
+	private var S1: Double = 0
+	private var S2: Double = 0
+	private var F1: Double = 0
+	private var F2: Double = 0
+	private var n: Double = 0
+	private var resultForHistory: [String] = []
 	
 	// MARK: - Internal methods
-
-	func calculate() -> [Double] {
-		S1 = round(Double.pi * ((D1*D1)/4 - (D2*D2)/4))
-		S2 = round(Double.pi * d * d / 4)
-		F1 = round(S1 * P)
-		F2 = round(στ * S2)
-		n = round(F1/F2)
-		return [S1, S2, F1, F2, n]
-	}
-	
+  
 	func getFormattedResult() -> [String] {
 		for item in calculate() {
 			result.append("\(item)")
@@ -149,6 +140,17 @@ final class BoltsCountCalculationCore {
 			outputValues: ["\(S1)", "\(S2)", "\(F1)", "\(F2)", "\(n)"])
 		return historyModel
 	}
+  
+  // MARK: - Private methods
+  
+  private func calculate() -> [Double] {
+    S1 = round(Double.pi * ((D1*D1)/4 - (D2*D2)/4))
+    S2 = round(Double.pi * d * d / 4)
+    F1 = round(S1 * P)
+    F2 = round(στ * S2)
+    n = round(F1/F2)
+    return [S1, S2, F1, F2, n]
+  }
 	
 	// MARK: - Initialization
 
@@ -160,8 +162,6 @@ final class BoltsCountCalculationCore {
 		self.στ = inputValues[4]
 	}
 }
-
-
 
 extension BoltsCountCalculationCore {
 	
